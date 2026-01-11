@@ -1,0 +1,10 @@
+{
+    (
+        modifiers: [
+            Super,
+            Shift,
+        ],
+        key: "b",
+        description: Some("Open Browser"),
+    ): Spawn("xdg-open about:blank"),
+}
