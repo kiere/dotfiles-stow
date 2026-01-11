@@ -1,0 +1,24 @@
+# Credentials & auth
+.credentials.json
+**/credentials*
+**/*token*
+**/*auth*
+
+# API key fragments in claude.json (version manually if needed)
+claude.json
+
+# Session data
+projects/
+statsig/
+*.sqlite*
+*.db
+
+# Nested git repos (plugins/skills you installed)
+plugins/
+skills/
+**/mcp-*/
+**/.git/
+
+# Logs & cache
+*.log
+cache/
