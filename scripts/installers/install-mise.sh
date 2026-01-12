@@ -7,7 +7,12 @@ source "$SCRIPT_DIR/lib/helpers.sh"
 
 section "Installing mise"
 
-# mise is available in Fedora 41+ repos
+# Enable COPR repo for mise
+if ! dnf copr list 2>/dev/null | grep -q "jdxcode/mise"; then
+  info "Enabling mise COPR repository..."
+  sudo dnf copr enable -y jdxcode/mise
+fi
+
 dnf_install mise
 
 info "mise installed successfully"
