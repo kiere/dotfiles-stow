@@ -13,5 +13,8 @@ require_mise
 info "Installing Python 3 (latest)..."
 mise use --global python@latest
 
+# Re-activate mise to pick up newly installed Python
+eval "$(mise activate bash)"
+
 info "Python installed successfully"
 python --version

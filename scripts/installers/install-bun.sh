@@ -13,5 +13,8 @@ require_mise
 info "Installing Bun (latest)..."
 mise use --global bun@latest
 
+# Re-activate mise to pick up newly installed Bun
+eval "$(mise activate bash)"
+
 info "Bun installed successfully"
 bun --version
