@@ -1,0 +1,7 @@
+[user]
+	email = kiere@mac.com
+	name = Kiere El-Shafie
+[init]
+	defaultBranch = main
+[alias]
+	co = checkout
