@@ -38,16 +38,6 @@ dnf_install() {
   fi
 }
 
-dnf_group_install() {
-  local group="$1"
-  if ! dnf group list installed 2>/dev/null | grep -q "$group"; then
-    info "Installing group $group..."
-    sudo dnf group install -y "$group"
-  else
-    info "Group $group already installed"
-  fi
-}
-
 ensure_brew() {
   if ! is_installed brew; then
     error "Homebrew is not installed. Run install-homebrew.sh first."

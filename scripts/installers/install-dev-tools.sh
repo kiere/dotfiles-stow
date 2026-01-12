@@ -7,9 +7,9 @@ source "$SCRIPT_DIR/lib/helpers.sh"
 
 section "Installing Development Tools"
 
-# Install Development Tools group
-info "Installing Development Tools group..."
-dnf_group_install "Development Tools"
+# Install development-tools group
+info "Installing development-tools group..."
+sudo dnf group install -y development-tools
 
 section "Installing Ruby build dependencies"
 
