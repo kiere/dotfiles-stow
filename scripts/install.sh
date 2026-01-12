@@ -7,11 +7,13 @@ INSTALLERS_DIR="$SCRIPT_DIR/installers"
 source "$INSTALLERS_DIR/lib/helpers.sh"
 
 # All available installer scripts in order
+# NOTE: Homebrew and its dependents (install-ide.sh, install-ai-tools.sh) are at
+# the end because Homebrew's installer runs `sudo -k` which clears the sudo
+# credential cache. By running all dnf-based installs first, we avoid multiple
+# sudo password prompts.
 ALL_SCRIPTS=(
   "install-stow.sh"
-  "install-homebrew.sh"
   "install-dev-tools.sh"
-  "install-ide.sh"
   "install-mise.sh"
   "install-ruby.sh"
   "install-python.sh"
@@ -24,6 +26,8 @@ ALL_SCRIPTS=(
   "install-apps.sh"
   "install-fonts.sh"
   "install-cli-tools.sh"
+  "install-homebrew.sh"
+  "install-ide.sh"
   "install-ai-tools.sh"
 )
 
