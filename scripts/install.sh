@@ -13,6 +13,7 @@ source "$INSTALLERS_DIR/lib/helpers.sh"
 # sudo password prompts.
 ALL_SCRIPTS=(
   "install-stow.sh"
+  "install-flatpak-remotes.sh"
   "install-dev-tools.sh"
   "install-mise.sh"
   "install-ruby.sh"
@@ -34,6 +35,7 @@ ALL_SCRIPTS=(
 # Map flags to scripts
 declare -A FLAG_MAP=(
   ["--stow"]="install-stow.sh"
+  ["--flatpak"]="install-flatpak-remotes.sh"
   ["--homebrew"]="install-homebrew.sh"
   ["--dev"]="install-dev-tools.sh"
   ["--ide"]="install-ide.sh"
@@ -61,6 +63,7 @@ Bootstrap a fresh Fedora COSMIC installation with dotfiles and tools.
 Options:
   (no args)     Run all installers
   --stow        Install stow and apply dotfile configs
+  --flatpak     Configure Flatpak remotes (Flathub, COSMIC)
   --homebrew    Install Homebrew
   --dev         Install development tools and build dependencies
   --ide         Install Neovim, LazyVim deps, lazygit, lazydocker
