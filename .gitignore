@@ -12,6 +12,7 @@ projects/
 statsig/
 *.sqlite*
 *.db
+*.db-*
 
 # Nested git repos (plugins/skills you installed)
 plugins/
@@ -22,3 +23,7 @@ skills/
 # Logs & cache
 *.log
 cache/
+
+# Session database
+sessions.db
+sessions.db-*
