@@ -26,6 +26,7 @@ ALL_SCRIPTS=(
   "install-postgres-client.sh"
   "install-apps.sh"
   "install-dropbox.sh"
+  "install-gearlever.sh"
   "install-fonts.sh"
   "install-cli-tools.sh"
   "install-homebrew.sh"
@@ -51,6 +52,7 @@ declare -A FLAG_MAP=(
   ["--postgres"]="install-postgres-client.sh"
   ["--apps"]="install-apps.sh"
   ["--dropbox"]="install-dropbox.sh"
+  ["--gearlever"]="install-gearlever.sh"
   ["--fonts"]="install-fonts.sh"
   ["--cli"]="install-cli-tools.sh"
   ["--ai"]="install-ai-tools.sh"
@@ -80,6 +82,7 @@ Options:
   --postgres    Install PostgreSQL client
   --apps        Install desktop apps (VSCode, Brave, etc.)
   --dropbox     Install Dropbox cloud storage client
+  --gearlever   Install Gear Lever (AppImage manager)
   --fonts       Install fonts (Cascadia Code, Nerd Fonts)
   --cli         Install CLI tools (btop, fastfetch)
   --ai          Install AI coding tools (Claude Code, Codex)

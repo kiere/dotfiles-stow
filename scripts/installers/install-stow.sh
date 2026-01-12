@@ -26,6 +26,7 @@ STOW_PACKAGES=(
   tidewave
   flameshot
   claude
+  gearlever
 )
 
 section "Applying stow packages"
