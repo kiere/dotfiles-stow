@@ -19,6 +19,9 @@ mise install ruby@3.4
 
 section "Installing global gems"
 
+# Re-activate mise to pick up newly installed Ruby
+eval "$(mise activate bash)"
+
 # Install bundler
 info "Installing bundler..."
 gem install bundler

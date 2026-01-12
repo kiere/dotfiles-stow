@@ -15,6 +15,9 @@ mise use --global elixir@latest
 
 section "Installing Phoenix dependencies"
 
+# Re-activate mise to pick up newly installed Elixir
+eval "$(mise activate bash)"
+
 # Install Hex package manager
 info "Installing Hex..."
 mix local.hex --force

@@ -9,6 +9,9 @@ section "Installing Rails"
 
 require_mise
 
+# Re-activate mise to ensure Ruby shims are available
+eval "$(mise activate bash)"
+
 # Verify Ruby is available
 if ! is_installed ruby; then
   error "Ruby is not installed. Run install-ruby.sh first."
