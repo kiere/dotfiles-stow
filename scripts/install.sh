@@ -25,6 +25,7 @@ ALL_SCRIPTS=(
   "install-podman.sh"
   "install-postgres-client.sh"
   "install-apps.sh"
+  "install-dropbox.sh"
   "install-fonts.sh"
   "install-cli-tools.sh"
   "install-homebrew.sh"
@@ -49,6 +50,7 @@ declare -A FLAG_MAP=(
   ["--podman"]="install-podman.sh"
   ["--postgres"]="install-postgres-client.sh"
   ["--apps"]="install-apps.sh"
+  ["--dropbox"]="install-dropbox.sh"
   ["--fonts"]="install-fonts.sh"
   ["--cli"]="install-cli-tools.sh"
   ["--ai"]="install-ai-tools.sh"
@@ -77,6 +79,7 @@ Options:
   --podman      Install Podman
   --postgres    Install PostgreSQL client
   --apps        Install desktop apps (VSCode, Brave, etc.)
+  --dropbox     Install Dropbox cloud storage client
   --fonts       Install fonts (Cascadia Code, Nerd Fonts)
   --cli         Install CLI tools (btop, fastfetch)
   --ai          Install AI coding tools (Claude Code, Codex)
