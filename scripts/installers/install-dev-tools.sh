@@ -33,7 +33,7 @@ section "Installing Elixir/Erlang build dependencies"
 # Elixir/Erlang build dependencies
 ERLANG_DEPS=(
   ncurses-devel
-  wxGTK3-devel
+  wxGTK-devel
 )
 
 for pkg in "${ERLANG_DEPS[@]}"; do
