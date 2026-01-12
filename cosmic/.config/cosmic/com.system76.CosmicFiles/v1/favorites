@@ -1,0 +1,11 @@
+[
+    Home,
+    Documents,
+    Downloads,
+    Music,
+    Pictures,
+    Videos,
+    Path("/home/kiere/Dropbox/1 Projects"),
+    Path("/home/kiere/Dropbox/2 Areas"),
+    Path("/home/kiere/Dropbox/3 Resources"),
+]
