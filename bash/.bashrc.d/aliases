@@ -10,5 +10,6 @@ alias gd='git diff'
 alias gdi='git diff --cached'
 
 # Project aliases
+alias dotfiles='cd ~/dotfiles'
 alias outdoor='cd ~/work/code/outdoor'
 alias ginger='cd ~/work/code/ginger'
