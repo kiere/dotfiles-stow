@@ -14,6 +14,7 @@ source "$INSTALLERS_DIR/lib/helpers.sh"
 ALL_SCRIPTS=(
   "install-stow.sh"
   "install-flatpak-remotes.sh"
+  "install-snapper.sh"
   "install-dev-tools.sh"
   "install-mise.sh"
   "install-ruby.sh"
@@ -38,6 +39,7 @@ ALL_SCRIPTS=(
 declare -A FLAG_MAP=(
   ["--stow"]="install-stow.sh"
   ["--flatpak"]="install-flatpak-remotes.sh"
+  ["--snapper"]="install-snapper.sh"
   ["--homebrew"]="install-homebrew.sh"
   ["--dev"]="install-dev-tools.sh"
   ["--ide"]="install-ide.sh"
