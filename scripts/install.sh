@@ -30,6 +30,7 @@ ALL_SCRIPTS=(
   "install-gearlever.sh"
   "install-fonts.sh"
   "install-cli-tools.sh"
+  "install-tailscale.sh"
   "install-homebrew.sh"
   "install-ide.sh"
   "install-ai-tools.sh"
@@ -57,6 +58,7 @@ declare -A FLAG_MAP=(
   ["--gearlever"]="install-gearlever.sh"
   ["--fonts"]="install-fonts.sh"
   ["--cli"]="install-cli-tools.sh"
+  ["--tailscale"]="install-tailscale.sh"
   ["--ai"]="install-ai-tools.sh"
 )
 
