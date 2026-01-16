@@ -80,7 +80,7 @@ Options:
 
   Development:
   --dev         Install development tools and build dependencies
-  --ide         Install Neovim, LazyVim deps, lazygit, lazydocker
+  --ide         Install Neovim, LazyVim deps, lazygit, lazydocker, gh, 1password-cli
   --mise        Install mise version manager
   --ruby        Install Ruby 4.0 + 3.4.x via mise
   --python      Install Python 3 (latest) via mise
