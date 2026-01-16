@@ -1,0 +1,14 @@
+#!/bin/bash
+
+# vid2mp4 - convert mov/mkv to mp4, remux if already h264
+
+for f in *.mov *.mkv; do
+  [ -e "$f" ] || continue
+  codec=$(ffprobe -v error -select_streams v:0 -show_entries stream=codec_name -of csv=p=0 "$f")
+  out="${f%.*}.mp4"
+  if [ "$codec" = "h264" ]; then
+    ffmpeg -i "$f" -c copy "$out"
+  else
+    ffmpeg -i "$f" -c:v libx264 -crf 20 -c:a aac -b:a 192k "$out"
+  fi
+done
