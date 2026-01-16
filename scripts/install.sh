@@ -76,6 +76,7 @@ Options:
   Core Setup:
   --stow        Install stow and apply dotfile configs
   --flatpak     Configure Flatpak remotes (Flathub, COSMIC)
+  --snapper     Install Snapper for Btrfs snapshots (auto DNF snapshots)
   --homebrew    Install Homebrew
 
   Development:

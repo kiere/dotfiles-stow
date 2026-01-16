@@ -35,9 +35,9 @@ fi
 section "Installing Zen Browser"
 
 # Zen Browser is only available as Flatpak
-if ! flatpak list 2>/dev/null | grep -q "io.github.nickvision.zen"; then
+if ! flatpak list --system 2>/dev/null | grep -q "app.zen_browser.zen"; then
   info "Installing Zen Browser via Flatpak..."
-  flatpak install -y flathub app.zen_browser.zen
+  sudo flatpak install --system -y flathub app.zen_browser.zen
 else
   info "Zen Browser already installed"
 fi
@@ -53,6 +53,59 @@ if ! is_installed 1password; then
   sudo dnf install -y 1password
 else
   info "1Password already installed"
+fi
+
+section "Installing Signal"
+
+# Signal - encrypted messaging (Flatpak)
+if ! flatpak list --system 2>/dev/null | grep -q "org.signal.Signal"; then
+  info "Installing Signal via Flatpak..."
+  sudo flatpak install --system -y flathub org.signal.Signal
+else
+  info "Signal already installed"
+fi
+
+section "Installing Spotify"
+
+# Spotify - music streaming (Flatpak)
+if ! flatpak list --system 2>/dev/null | grep -q "com.spotify.Client"; then
+  info "Installing Spotify via Flatpak..."
+  sudo flatpak install --system -y flathub com.spotify.Client
+else
+  info "Spotify already installed"
+fi
+
+section "Installing LocalSend"
+
+# LocalSend - cross-platform AirDrop alternative (Flatpak)
+if ! flatpak list --system 2>/dev/null | grep -q "org.localsend.localsend_app"; then
+  info "Installing LocalSend via Flatpak..."
+  sudo flatpak install --system -y flathub org.localsend.localsend_app
+else
+  info "LocalSend already installed"
+fi
+
+section "Installing image and document viewers"
+
+# Pinta - simple image editor (like Paint.NET)
+dnf_install pinta
+
+# Evince - PDF/document viewer
+dnf_install evince
+
+section "Installing OBS Studio"
+
+# OBS Studio - streaming and screen recording
+dnf_install obs-studio
+
+section "Installing Cursor"
+
+# Cursor - AI-first code editor (RPM)
+if ! is_installed cursor; then
+  info "Installing Cursor..."
+  sudo dnf install -y "https://api2.cursor.sh/updates/download/golden/linux-x64-rpm/cursor/2.3"
+else
+  info "Cursor already installed"
 fi
 
 info "Desktop applications installed successfully"
