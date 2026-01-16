@@ -85,11 +85,13 @@ Options:
   --podman      Install Podman
   --postgres    Install PostgreSQL client
   --apps        Install desktop apps (VSCode, Brave, etc.)
+
+  Applications:
+  --apps        Install desktop apps (VSCode, Brave, 1Password, Signal, Spotify, etc.)
   --dropbox     Install Dropbox cloud storage client
   --gearlever   Install Gear Lever (AppImage manager)
-  --fonts       Install fonts (Cascadia Code, Nerd Fonts)
-  --cli         Install CLI tools (btop, fastfetch)
-  --ai          Install AI coding tools (Claude Code, Codex)
+  --cli         Install CLI tools (bat, eza, zoxide, btop, jq, starship, etc.)
+  --fonts       Install fonts (Cascadia Code, Nerd Fonts, Noto)
   --help        Show this help message
 
 Examples:
