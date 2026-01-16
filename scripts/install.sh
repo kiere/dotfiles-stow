@@ -70,9 +70,13 @@ Bootstrap a fresh Fedora COSMIC installation with dotfiles and tools.
 
 Options:
   (no args)     Run all installers
+
+  Core Setup:
   --stow        Install stow and apply dotfile configs
   --flatpak     Configure Flatpak remotes (Flathub, COSMIC)
   --homebrew    Install Homebrew
+
+  Development:
   --dev         Install development tools and build dependencies
   --ide         Install Neovim, LazyVim deps, lazygit, lazydocker
   --mise        Install mise version manager
@@ -84,7 +88,7 @@ Options:
   --docker      Install Docker CE
   --podman      Install Podman
   --postgres    Install PostgreSQL client
-  --apps        Install desktop apps (VSCode, Brave, etc.)
+  --ai          Install AI coding tools (Claude Code, Codex, Copilot, Ollama, LM Studio)
 
   Applications:
   --apps        Install desktop apps (VSCode, Brave, 1Password, Signal, Spotify, etc.)
@@ -92,12 +96,14 @@ Options:
   --gearlever   Install Gear Lever (AppImage manager)
   --cli         Install CLI tools (bat, eza, zoxide, btop, jq, starship, etc.)
   --fonts       Install fonts (Cascadia Code, Nerd Fonts, Noto)
+
   --help        Show this help message
 
 Examples:
   $(basename "$0")                  # Run all installers
   $(basename "$0") --dev --ide      # Just dev tools and IDE setup
   $(basename "$0") --ruby --rails   # Just Ruby and Rails
+  $(basename "$0") --cli --fonts    # Just CLI tools and fonts
 EOF
 }
 
