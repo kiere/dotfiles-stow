@@ -8,11 +8,11 @@ source "$SCRIPT_DIR/lib/helpers.sh"
 section "Installing Gear Lever"
 
 # Gear Lever is a Flatpak app for managing AppImages
-if flatpak list 2>/dev/null | grep -q "it.mijorus.gearlever"; then
+if flatpak list --system 2>/dev/null | grep -q "it.mijorus.gearlever"; then
   info "Gear Lever is already installed"
 else
   info "Installing Gear Lever via Flatpak..."
-  flatpak install -y flathub it.mijorus.gearlever
+  sudo flatpak install --system -y flathub it.mijorus.gearlever
 fi
 
 info "Gear Lever installed successfully"
