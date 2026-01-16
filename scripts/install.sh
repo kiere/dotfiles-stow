@@ -31,6 +31,7 @@ ALL_SCRIPTS=(
   "install-fonts.sh"
   "install-cli-tools.sh"
   "install-tailscale.sh"
+  "install-cups.sh"
   "install-homebrew.sh"
   "install-ide.sh"
   "install-ai-tools.sh"
@@ -59,6 +60,7 @@ declare -A FLAG_MAP=(
   ["--fonts"]="install-fonts.sh"
   ["--cli"]="install-cli-tools.sh"
   ["--tailscale"]="install-tailscale.sh"
+  ["--cups"]="install-cups.sh"
   ["--ai"]="install-ai-tools.sh"
 )
 
@@ -96,6 +98,9 @@ Options:
   --gearlever   Install Gear Lever (AppImage manager)
   --cli         Install CLI tools (bat, eza, zoxide, btop, jq, starship, etc.)
   --fonts       Install fonts (Cascadia Code, Nerd Fonts, Noto)
+
+  Networking & System:
+  --cups        Install CUPS printing system
 
   --help        Show this help message
 
