@@ -8,8 +8,16 @@
     state: present
   become: true
 
-# Fedora already has Flathub, but ensure it's there on all distros
-- name: Add Flathub repository (system-wide)
+# Fedora ships with a filtered Flathub - remove it and add the full one
+- name: Remove filtered Flathub remote (Fedora)
+  ansible.builtin.command:
+    cmd: flatpak remote-delete --system flathub --force
+  become: true
+  failed_when: false
+  changed_when: false
+  when: ansible_distribution in distros_fedora
+
+- name: Add full Flathub repository (system-wide)
   community.general.flatpak_remote:
     name: flathub
     flatpakrepo_url: https://dl.flathub.org/repo/flathub.flatpakrepo
