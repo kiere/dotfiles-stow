@@ -1,0 +1,12 @@
+---
+# Ansible Galaxy requirements
+# Install with: ansible-galaxy install -r requirements.yml
+
+collections:
+  # For Flatpak module
+  - name: community.general
+    version: ">=8.0.0"
+
+  # For AUR package management on Arch Linux
+  - name: kewlfft.aur
+    version: ">=0.9.0"

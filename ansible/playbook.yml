@@ -1,0 +1,99 @@
+---
+# Main playbook for dotfiles installation
+#
+# Usage:
+#   Full install:     ansible-playbook playbook.yml
+#   Specific roles:   ansible-playbook playbook.yml --tags "dev-tools,cli-tools"
+#   List tags:        ansible-playbook playbook.yml --list-tags
+#
+# Supported distributions:
+#   - Fedora (Workstation and Atomic)
+#   - Ubuntu / Pop!_OS
+#   - Arch Linux
+
+- name: Bootstrap development environment
+  hosts: localhost
+  become: false  # Escalate per-task as needed
+
+  pre_tasks:
+    - name: Display detected distribution
+      ansible.builtin.debug:
+        msg: "Detected: {{ ansible_distribution }} {{ ansible_distribution_version }} ({{ ansible_os_family }})"
+
+    - name: Verify supported distribution
+      ansible.builtin.assert:
+        that:
+          - ansible_distribution in distros_supported
+        fail_msg: "Unsupported distribution: {{ ansible_distribution }}. Supported: {{ distros_supported | join(', ') }}"
+        success_msg: "Distribution {{ ansible_distribution }} is supported"
+
+  roles:
+    # Core setup (run first)
+    - role: dev-tools
+      tags: [dev-tools, dev, core]
+
+    - role: cli-tools
+      tags: [cli-tools, cli, core]
+
+    - role: fonts
+      tags: [fonts, core]
+
+    # IDE and editor setup
+    - role: ide
+      tags: [ide, neovim, editor]
+
+    # Language runtimes (via mise)
+    - role: mise
+      tags: [mise, languages]
+
+    - role: ruby
+      tags: [ruby, languages]
+
+    - role: python
+      tags: [python, languages]
+
+    - role: elixir
+      tags: [elixir, languages]
+
+    - role: bun
+      tags: [bun, node, languages]
+
+    # Containers (Podman only - Docker breaks libvirt/KVM networking)
+    - role: podman
+      tags: [podman, containers]
+
+    # Desktop applications
+    - role: flatpak
+      tags: [flatpak, apps]
+
+    - role: apps
+      tags: [apps, desktop]
+
+    # Services and networking
+    - role: tailscale
+      tags: [tailscale, networking]
+
+    - role: cups
+      tags: [cups, printing]
+
+    - role: ufw
+      tags: [ufw, firewall, security]
+
+    # AI coding tools
+    - role: ai-tools
+      tags: [ai-tools, ai]
+
+    # Dotfiles via stow (run last)
+    - role: stow
+      tags: [stow, dotfiles]
+
+  post_tasks:
+    - name: Installation complete
+      ansible.builtin.debug:
+        msg: |
+          Installation complete!
+
+          You may need to:
+          - Log out and back in for group changes (docker)
+          - Run 'source ~/.bashrc' to reload shell config
+          - Run 'stow' manually if dotfiles weren't applied

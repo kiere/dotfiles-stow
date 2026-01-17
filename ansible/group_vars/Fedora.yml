@@ -1,0 +1,116 @@
+---
+# Fedora-specific package names and configuration
+
+# Package manager
+pkg_manager: dnf
+
+# Build tools and development headers
+pkg_build_essential:
+  - gcc
+  - gcc-c++
+  - make
+  - autoconf
+  - automake
+  - libtool
+  - pkgconf
+  - bison
+  - flex
+  - patch
+  - git
+
+pkg_dev_headers:
+  - openssl-devel
+  - readline-devel
+  - zlib-devel
+  - libyaml-devel
+  - libffi-devel
+  - ncurses-devel
+  - wxGTK-devel
+
+pkg_rust:
+  - rust
+  - cargo
+
+pkg_utilities:
+  - inotify-tools
+
+# CLI tools
+pkg_cli_tools:
+  - btop
+  - fastfetch
+  - inxi
+  - bat
+  - zoxide
+  - dust
+  - jq
+  - yq
+  - tldr
+  - gum
+
+# IDE and editor tools
+pkg_ide:
+  - neovim
+  - ripgrep
+  - fd-find
+  - fzf
+  - gh
+
+# Fonts
+pkg_fonts:
+  - cascadia-code-fonts
+  - google-noto-fonts-common
+  - google-noto-emoji-fonts
+  - google-noto-sans-cjk-fonts
+
+# CUPS printing
+pkg_cups:
+  - cups
+  - cups-filters
+  - cups-browsed
+  - system-config-printer
+  - avahi
+  - nss-mdns
+
+# Podman packages (Docker removed - breaks libvirt/KVM networking)
+pkg_podman:
+  - podman
+  - podman-compose
+
+# Desktop apps (native)
+pkg_desktop_apps:
+  - pinta
+  - evince
+  - obs-studio
+
+# Firewall
+pkg_firewall:
+  - ufw
+
+# PostgreSQL client
+pkg_postgres:
+  - postgresql
+
+# Snapper (Btrfs)
+pkg_snapper:
+  - snapper
+  - python3-dnf-plugin-snapper
+
+# Stow
+pkg_stow:
+  - stow
+  - git
+
+# lazygit requires COPR
+lazygit_copr_repo: "dejan/lazygit"
+pkg_lazygit: lazygit
+
+# mise requires COPR
+mise_copr_repo: "jdx/mise"
+pkg_mise: mise
+
+# External repository URLs
+repo_tailscale: "https://pkgs.tailscale.com/stable/fedora/tailscale.repo"
+repo_vscode_key: "https://packages.microsoft.com/keys/microsoft.asc"
+repo_brave_key: "https://brave-browser-rpm-release.s3.brave.com/brave-core.asc"
+repo_brave_repo: "https://brave-browser-rpm-release.s3.brave.com/brave-browser.repo"
+repo_1password_key: "https://downloads.1password.com/linux/keys/1password.asc"

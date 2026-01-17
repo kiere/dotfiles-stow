@@ -1,0 +1,73 @@
+---
+# Common variables for all distributions
+
+# Distribution family groupings (for cleaner when clauses)
+distros_debian:
+  - Ubuntu
+  - Pop!_OS
+
+distros_arch:
+  - Archlinux
+  - CachyOS
+
+distros_fedora:
+  - Fedora
+
+# All supported distributions
+distros_supported:
+  - Fedora
+  - Ubuntu
+  - Pop!_OS
+  - Archlinux
+  - CachyOS
+
+# User configuration
+user_name: "{{ ansible_user_id }}"
+user_home: "{{ ansible_env.HOME }}"
+
+# Dotfiles location
+dotfiles_dir: "{{ user_home }}/dotfiles"
+
+# Stow packages to apply
+stow_packages:
+  - bash
+  - git
+  - nvim
+  - kitty
+  - cosmic
+  - mise
+  - lazygit
+  - lazydocker
+  - tidewave
+  - flameshot
+  - claude
+  - gearlever
+  - bin
+
+# Flatpak apps (cross-distro)
+flatpak_apps:
+  - app.zen_browser.zen           # Zen Browser
+  - org.signal.Signal             # Signal
+  - com.spotify.Client            # Spotify
+  - org.localsend.localsend_app   # LocalSend
+  - it.mijorus.gearlever          # Gear Lever
+  - io.podman_desktop.PodmanDesktop  # Podman Desktop
+
+# Flatpak apps for Atomic/Flatpak-first mode
+flatpak_apps_optional:
+  - com.visualstudio.code         # VSCode
+  - com.brave.Browser             # Brave
+  - com.github.PintaProject.Pinta # Pinta
+  - org.gnome.Evince              # Evince
+  - com.obsproject.Studio         # OBS Studio
+
+# mise-managed language versions
+mise_ruby_version: "4.0"
+mise_ruby_additional: "3.4"
+mise_python_version: "latest"
+mise_elixir_version: "latest"
+mise_bun_version: "latest"
+
+# 1Password GPG key for verification (Arch AUR)
+onepassword_gpg_key: "https://downloads.1password.com/linux/keys/1password.asc"
+onepassword_gpg_fingerprint: "3FEF9748469ADBE15DA7CA80AC2D62742012EA22"

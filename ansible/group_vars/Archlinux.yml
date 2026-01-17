@@ -1,0 +1,123 @@
+---
+# Arch Linux specific package names
+# Note: Arch includes headers in main packages (no -devel suffix)
+
+# Package manager
+pkg_manager: pacman
+
+# Build tools (base-devel meta package covers most)
+pkg_build_essential:
+  - base-devel  # Includes gcc, make, autoconf, automake, etc.
+  - git
+
+# Development headers (included in main packages on Arch)
+pkg_dev_headers:
+  - openssl
+  - readline
+  - zlib
+  - libyaml
+  - libffi
+  - ncurses
+  - wxwidgets-gtk3
+
+pkg_rust:
+  - rust  # Includes both rustc and cargo
+
+pkg_utilities:
+  - inotify-tools
+
+# CLI tools (most are in official repos - Arch advantage!)
+pkg_cli_tools:
+  - btop
+  - fastfetch
+  - inxi
+  - bat
+  - eza          # In official repos on Arch
+  - zoxide
+  - dust
+  - jq
+  - yq           # In official repos on Arch
+  - tldr
+  - gum          # In official repos on Arch
+  - starship     # In official repos on Arch
+
+# IDE and editor tools
+pkg_ide:
+  - neovim
+  - ripgrep
+  - fd           # Package name is 'fd' not 'fd-find'
+  - fzf
+  - lazygit      # In official repos on Arch
+  - github-cli   # Package name differs from Fedora/Ubuntu
+  - tree-sitter  # In official repos on Arch
+
+# Fonts
+pkg_fonts:
+  - ttf-cascadia-code
+  - noto-fonts
+  - noto-fonts-emoji
+  - noto-fonts-cjk
+
+# CUPS printing
+pkg_cups:
+  - cups
+  - cups-filters
+  - cups-browsed  # May be part of cups-filters
+  - system-config-printer
+  - avahi
+  - nss-mdns
+
+# Podman packages (Docker removed - breaks libvirt/KVM networking)
+pkg_podman:
+  - podman
+  - podman-compose
+
+# Desktop apps (native)
+pkg_desktop_apps:
+  - pinta
+  - evince
+  - obs-studio
+
+# Firewall
+pkg_firewall:
+  - ufw
+
+# PostgreSQL client
+pkg_postgres:
+  - postgresql
+
+# Snapper (Btrfs)
+pkg_snapper:
+  - snapper
+  # Note: No DNF plugin equivalent, use snapper directly
+
+# Stow
+pkg_stow:
+  - stow
+  - git
+
+# Tailscale (in official repos)
+pkg_tailscale:
+  - tailscale
+
+# mise from AUR
+mise_aur_package: mise
+pkg_mise: mise  # Will use AUR
+
+# Brave browser (in extra repo)
+pkg_brave: brave-bin
+
+# AUR packages (require kewlfft.aur collection)
+aur_packages:
+  - 1password
+  - 1password-cli
+  - visual-studio-code-bin  # Or use Flatpak
+  - lazydocker-bin
+
+# AUR packages requiring GPG key import first
+aur_packages_gpg:
+  1password:
+    gpg_key: "https://downloads.1password.com/linux/keys/1password.asc"
+    packages:
+      - 1password
+      - 1password-cli

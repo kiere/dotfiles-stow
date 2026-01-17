@@ -1,0 +1,128 @@
+---
+# Ubuntu and Pop!_OS specific package names
+# Pop!_OS uses Ubuntu packages, so this file covers both
+
+# Package manager
+pkg_manager: apt
+
+# Build tools and development headers
+pkg_build_essential:
+  - gcc
+  - g++
+  - make
+  - autoconf
+  - automake
+  - libtool
+  - pkg-config
+  - bison
+  - flex
+  - patch
+  - git
+
+pkg_dev_headers:
+  - libssl-dev
+  - libreadline-dev
+  - zlib1g-dev
+  - libyaml-dev
+  - libffi-dev
+  - libncurses-dev
+  - libwxgtk3.2-dev
+
+pkg_rust:
+  - rustc
+  - cargo
+
+pkg_utilities:
+  - inotify-tools
+
+# CLI tools
+pkg_cli_tools:
+  - btop
+  - inxi
+  - bat
+  - zoxide
+  - jq
+  - tealdeer  # tldr implementation
+
+# CLI tools needing special handling
+# fastfetch: needs PPA ppa:zhangsongcui3371/fastfetch
+# gum: needs Charm repo
+# yq: snap or binary install
+# dust: cargo install or .deb
+
+# IDE and editor tools
+pkg_ide:
+  - neovim
+  - ripgrep
+  - fd-find
+  - fzf
+
+# gh needs GitHub apt repo
+
+# Fonts
+pkg_fonts:
+  - fonts-cascadia-code
+  - fonts-noto
+  - fonts-noto-color-emoji
+  - fonts-noto-cjk
+
+# CUPS printing
+pkg_cups:
+  - cups
+  - cups-filters
+  - cups-browsed
+  - system-config-printer
+  - avahi-daemon
+  - libnss-mdns
+
+# Podman packages (Docker removed - breaks libvirt/KVM networking)
+pkg_podman:
+  - podman
+  - podman-compose
+
+# Desktop apps (native)
+pkg_desktop_apps:
+  - pinta
+  - evince
+  - obs-studio
+
+# Firewall (usually pre-installed)
+pkg_firewall:
+  - ufw
+
+# PostgreSQL client
+pkg_postgres:
+  - postgresql-client
+
+# Snapper (Btrfs)
+pkg_snapper:
+  - snapper
+  # Note: apt-btrfs-snapshot is different from DNF plugin
+
+# Stow
+pkg_stow:
+  - stow
+  - git
+
+# lazygit - binary install (no official PPA)
+lazygit_install_method: binary
+
+# mise apt repository
+mise_apt_repo: "deb [signed-by=/etc/apt/keyrings/mise-archive-keyring.gpg] https://mise.jdx.dev/apt stable main"
+mise_apt_key: "https://mise.jdx.dev/gpg-key.pub"
+pkg_mise: mise
+
+# External repository setup (different from Fedora)
+# Ubuntu uses gpg --dearmor and sources.list.d
+
+# PPAs needed
+ppa_fastfetch: "ppa:zhangsongcui3371/fastfetch"
+ppa_neovim: "ppa:neovim-ppa/unstable"  # For latest neovim
+
+# Charm repo for gum
+charm_repo_key: "https://repo.charm.sh/apt/gpg.key"
+charm_repo: "deb [signed-by=/usr/share/keyrings/charm-archive-keyring.gpg] https://repo.charm.sh/apt/ * *"
+
+# GitHub CLI repo
+gh_repo_key: "https://cli.github.com/packages/githubcli-archive-keyring.gpg"
+gh_repo: "deb [arch=amd64 signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main"
