@@ -31,7 +31,6 @@ ALL_SCRIPTS=(
   "install-fonts.sh"
   "install-cli-tools.sh"
   "install-tailscale.sh"
-  "install-ufw.sh"
   "install-cups.sh"
   "install-homebrew.sh"
   "install-ide.sh"
@@ -61,7 +60,6 @@ declare -A FLAG_MAP=(
   ["--fonts"]="install-fonts.sh"
   ["--cli"]="install-cli-tools.sh"
   ["--tailscale"]="install-tailscale.sh"
-  ["--ufw"]="install-ufw.sh"
   ["--cups"]="install-cups.sh"
   ["--ai"]="install-ai-tools.sh"
 )
@@ -104,7 +102,6 @@ Options:
 
   Networking & System:
   --tailscale   Install Tailscale mesh VPN
-  --ufw         Install UFW firewall with sensible defaults
   --cups        Install CUPS printing system
 
   --help        Show this help message
