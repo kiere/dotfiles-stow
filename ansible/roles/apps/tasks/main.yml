@@ -13,9 +13,11 @@
 # 1Password - different setup per distro
 # ============================================================
 
-# Fedora - add 1Password repo
+# Fedora - add 1Password repo (x86_64 only)
 - name: Setup 1Password (Fedora)
-  when: ansible_distribution in distros_fedora
+  when:
+    - ansible_distribution in distros_fedora
+    - ansible_architecture == "x86_64"
   become: true
   block:
     - name: Import 1Password GPG key
@@ -40,9 +42,11 @@
           - 1password-cli
         state: present
 
-# Ubuntu/Pop!_OS - add 1Password apt repo
+# Ubuntu/Pop!_OS - add 1Password apt repo (x86_64 only)
 - name: Setup 1Password (Ubuntu/Pop!_OS)
-  when: ansible_distribution in distros_debian
+  when:
+    - ansible_distribution in distros_debian
+    - ansible_architecture == "x86_64"
   become: true
   block:
     - name: Add 1Password GPG key
@@ -70,9 +74,11 @@
         state: present
         update_cache: true
 
-# Arch - 1Password from AUR with GPG verification
+# Arch - 1Password from AUR with GPG verification (x86_64 only)
 - name: Setup 1Password (Arch)
-  when: ansible_distribution in distros_arch
+  when:
+    - ansible_distribution in distros_arch
+    - ansible_architecture == "x86_64"
   block:
     - name: Import 1Password GPG key for AUR verification
       ansible.builtin.command:
@@ -237,11 +243,16 @@
     state: present
   when: ansible_distribution in distros_arch
 
+- name: Note about skipped x86_64-only apps
+  ansible.builtin.debug:
+    msg: "Note: 1Password skipped (x86_64 only, not available for {{ ansible_architecture }})"
+  when: ansible_architecture != "x86_64"
+
 - name: Display apps installation complete
   ansible.builtin.debug:
     msg: |
       Native apps installed:
-      - 1Password + CLI
+      - 1Password + CLI {{ '(skipped - x86_64 only)' if ansible_architecture != 'x86_64' else '' }}
       - VSCode
       - Brave Browser
       - Dropbox
