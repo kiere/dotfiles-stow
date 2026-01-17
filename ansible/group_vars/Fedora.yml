@@ -41,7 +41,7 @@ pkg_cli_tools:
   - inxi
   - bat
   - zoxide
-  - dust
+  - du-dust  # provides 'dust' command
   - jq
   - yq
   - tldr
