@@ -76,6 +76,9 @@
     - role: appimages
       tags: [appimages, apps, desktop]
 
+    - role: tableplus
+      tags: [tableplus, database, apps]
+
     # Services and networking
     - role: tailscale
       tags: [tailscale, networking]
