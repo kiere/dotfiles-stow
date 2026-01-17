@@ -7,6 +7,7 @@
   ansible.builtin.dnf:
     name: "{{ pkg_mise }}"
     state: present
+    update_cache: true
   become: true
   when: ansible_distribution in distros_fedora
 
