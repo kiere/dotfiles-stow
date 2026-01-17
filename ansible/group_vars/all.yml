@@ -65,6 +65,7 @@ flatpak_apps_optional:
 mise_ruby_version: "4.0"
 mise_ruby_additional: "3.4"
 mise_python_version: "latest"
+mise_erlang_version: "latest"
 mise_elixir_version: "latest"
 mise_bun_version: "latest"
 
