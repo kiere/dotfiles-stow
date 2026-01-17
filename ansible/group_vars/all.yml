@@ -52,6 +52,7 @@ flatpak_apps:
   - org.localsend.localsend_app   # LocalSend
   - it.mijorus.gearlever          # Gear Lever
   - io.podman_desktop.PodmanDesktop  # Podman Desktop
+  - md.obsidian.Obsidian          # Obsidian
 
 # Flatpak apps for Atomic/Flatpak-first mode
 flatpak_apps_optional:
