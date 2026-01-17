@@ -53,8 +53,22 @@ info "Ansible version: $(ansible --version | head -1)"
 info "Installing Ansible Galaxy collections..."
 ansible-galaxy collection install -r "$SCRIPT_DIR/requirements.yml"
 
-# Run playbook (--ask-become-pass prompts for sudo password)
+# Start sudo keepalive in background (prevents timeout during long playbook runs)
+info "Starting sudo keepalive..."
+sudo -v
+(while true; do sudo -v; sleep 60; done) &
+SUDO_KEEPALIVE_PID=$!
+
+# Cleanup function to kill background process
+cleanup() {
+  if kill -0 "$SUDO_KEEPALIVE_PID" 2>/dev/null; then
+    kill "$SUDO_KEEPALIVE_PID" 2>/dev/null
+  fi
+}
+trap cleanup EXIT
+
+# Run playbook
 info "Running Ansible playbook..."
-ansible-playbook -K -i "$SCRIPT_DIR/inventory/localhost.yml" "$SCRIPT_DIR/playbook.yml" "$@"
+ansible-playbook -i "$SCRIPT_DIR/inventory/localhost.yml" "$SCRIPT_DIR/playbook.yml" "$@"
 
 info "Installation complete!"
