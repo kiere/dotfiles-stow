@@ -90,6 +90,7 @@
   ansible.builtin.debug:
     msg: |
       IDE tools installed!
+      - Kitty terminal
       - Neovim (configure with LazyVim)
       - ripgrep, fd, fzf (fuzzy finding)
       - lazygit (TUI git client)

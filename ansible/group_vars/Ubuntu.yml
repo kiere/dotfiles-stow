@@ -53,6 +53,7 @@ pkg_cli_tools:
 # IDE and editor tools
 pkg_ide:
   - neovim
+  - kitty
   - ripgrep
   - fd-find
   - fzf
