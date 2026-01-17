@@ -21,9 +21,9 @@
 - name: Stow packages
   when: stow_dotfiles_check.stat.exists
   block:
-    - name: Set backup directory path
+    - name: Set backup timestamp
       ansible.builtin.set_fact:
-        stow_backup_dir: "{{ user_home }}/.config-backup-{{ ansible_date_time.iso8601_basic_short }}"
+        stow_backup_suffix: ".bak.{{ ansible_date_time.iso8601_basic_short }}"
 
     - name: Find top-level targets in each stow package
       ansible.builtin.find:
@@ -35,13 +35,13 @@
       register: stow_package_contents
       failed_when: false
 
-    - name: Build list of potential conflicts
+    - name: Build list of target paths
       ansible.builtin.set_fact:
-        stow_potential_conflicts: >-
+        stow_targets: >-
           {{
-            stow_potential_conflicts | default([]) +
+            stow_targets | default([]) +
             (item.files | default([]) | map(attribute='path') |
-             map('regex_replace', '^' + dotfiles_dir + '/[^/]+/', user_home + '/') | list)
+             map('regex_replace', '^' + dotfiles_dir + '/[^/]+', user_home) | list)
           }}
       loop: "{{ stow_package_contents.results }}"
       when: item.files is defined
@@ -49,41 +49,19 @@
     - name: Check which targets exist and are not symlinks
       ansible.builtin.stat:
         path: "{{ item }}"
-      loop: "{{ stow_potential_conflicts | default([]) }}"
-      register: stow_conflict_stats
+      loop: "{{ stow_targets | default([]) | unique }}"
+      register: stow_target_stats
 
-    - name: Identify actual conflicts (exists and not a symlink)
-      ansible.builtin.set_fact:
-        stow_actual_conflicts: >-
-          {{
-            stow_conflict_stats.results |
-            selectattr('stat.exists', 'defined') |
-            selectattr('stat.exists', 'equalto', true) |
-            selectattr('stat.islnk', 'defined') |
-            selectattr('stat.islnk', 'equalto', false) |
-            map(attribute='item') | list
-          }}
-
-    - name: Create backup directory if conflicts exist
-      ansible.builtin.file:
-        path: "{{ stow_backup_dir }}"
-        state: directory
-        mode: "0755"
-      when: stow_actual_conflicts | default([]) | length > 0
-
-    - name: Back up conflicting files and directories
+    - name: Rename conflicting items in place
       ansible.builtin.command:
-        cmd: >-
-          mv "{{ item }}"
-          "{{ stow_backup_dir }}/{{ item | regex_replace('^' + user_home + '/', '') | regex_replace('/', '_') }}"
-      loop: "{{ stow_actual_conflicts | default([]) }}"
+        cmd: mv "{{ item.stat.path }}" "{{ item.stat.path }}{{ stow_backup_suffix }}"
+      loop: "{{ stow_target_stats.results }}"
+      when:
+        - item.stat.exists | default(false)
+        - not (item.stat.islnk | default(false))
       changed_when: true
-      when: stow_actual_conflicts | default([]) | length > 0
-
-    - name: Display backup notice
-      ansible.builtin.debug:
-        msg: "Backed up {{ stow_actual_conflicts | length }} conflicting items to {{ stow_backup_dir }}"
-      when: stow_actual_conflicts | default([]) | length > 0
+      loop_control:
+        label: "{{ item.item }}"
 
     - name: Apply stow packages
       ansible.builtin.command:
@@ -100,3 +78,5 @@
           {% for pkg in stow_packages %}
           - {{ pkg }}
           {% endfor %}
+
+          Conflicting items were renamed with {{ stow_backup_suffix }} suffix.
