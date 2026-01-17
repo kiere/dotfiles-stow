@@ -26,58 +26,6 @@
     state: present
   become: true
 
-# --- mise installation (distro-specific) ---
-
-# Fedora: Enable COPR for mise
-- name: Enable mise COPR repository (Fedora)
-  community.general.copr:
-    name: "{{ mise_copr_repo }}"
-    state: enabled
-  become: true
-  when: ansible_distribution in distros_fedora
-
-# Debian-based: Add mise apt repository
-- name: Ensure apt keyrings directory exists (Debian-based)
-  ansible.builtin.file:
-    path: /etc/apt/keyrings
-    state: directory
-    mode: '0755'
-  become: true
-  when: ansible_distribution in distros_debian
-
-- name: Add mise GPG key (Debian-based)
-  ansible.builtin.get_url:
-    url: "{{ mise_apt_key }}"
-    dest: /etc/apt/keyrings/mise-archive-keyring.gpg
-    mode: '0644'
-  become: true
-  when: ansible_distribution in distros_debian
-
-- name: Add mise apt repository (Debian-based)
-  ansible.builtin.apt_repository:
-    repo: "{{ mise_apt_repo }}"
-    state: present
-    filename: mise
-  become: true
-  when: ansible_distribution in distros_debian
-
-# Arch-based: mise from AUR
-- name: Install mise from AUR (Arch-based)
-  kewlfft.aur.aur:
-    name: "{{ mise_aur_package }}"
-    state: present
-  become: true
-  become_user: "{{ user_name }}"
-  when: ansible_distribution in distros_arch
-
-# Install mise (Fedora/Debian after repo setup)
-- name: Install mise (Fedora/Debian)
-  ansible.builtin.package:
-    name: "{{ pkg_mise }}"
-    state: present
-  become: true
-  when: ansible_distribution not in distros_arch
-
 - name: Display dev-tools installation complete
   ansible.builtin.debug:
     msg: |
@@ -87,6 +35,6 @@
       - Build tools (gcc, make, autoconf, etc.)
       - Development headers (openssl, readline, zlib, etc.)
       - Rust toolchain
-      - mise version manager
+      - Utility packages (inotify-tools)
 
-      Next: Run language runtime roles (ruby, python, elixir, bun)
+      Next: Run the mise role for version manager

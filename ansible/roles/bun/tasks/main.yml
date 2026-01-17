@@ -2,7 +2,7 @@
 # Bun JavaScript runtime installation via mise
 # Supports: All distros (uses mise)
 
-- name: Install Bun {{ mise_bun_version }} via mise
+- name: Install Bun via mise ({{ mise_bun_version }})
   ansible.builtin.command:
     cmd: mise use --global bun@{{ mise_bun_version }}
   register: bun_install

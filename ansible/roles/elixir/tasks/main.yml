@@ -2,7 +2,7 @@
 # Elixir installation via mise
 # Supports: All distros (uses mise)
 
-- name: Install Elixir {{ mise_elixir_version }} via mise
+- name: Install Elixir via mise ({{ mise_elixir_version }})
   ansible.builtin.command:
     cmd: mise use --global elixir@{{ mise_elixir_version }}
   register: elixir_install

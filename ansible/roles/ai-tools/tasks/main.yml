@@ -11,8 +11,10 @@
 
 - name: Install Claude Code
   ansible.builtin.shell: |
+    set -o pipefail
     curl -fsSL https://claude.ai/install.sh | bash
   args:
+    executable: /bin/bash
     creates: "{{ user_home }}/.claude/local/bin/claude"
   when: not claude_check.stat.exists
   environment:

@@ -20,8 +20,10 @@
 # starship - install via curl on Fedora/Ubuntu
 - name: Install starship prompt (Fedora/Debian)
   ansible.builtin.shell: |
+    set -o pipefail
     curl -sS https://starship.rs/install.sh | sh -s -- -y
   args:
+    executable: /bin/bash
     creates: /usr/local/bin/starship
   become: true
   when: ansible_distribution not in distros_arch

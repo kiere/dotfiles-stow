@@ -2,7 +2,7 @@
 # Ruby installation via mise
 # Supports: All distros (uses mise)
 
-- name: Install Ruby {{ mise_ruby_version }} via mise
+- name: Install Ruby via mise ({{ mise_ruby_version }})
   ansible.builtin.command:
     cmd: mise use --global ruby@{{ mise_ruby_version }}
   register: ruby_install
@@ -10,7 +10,7 @@
   environment:
     PATH: "{{ ansible_env.PATH }}:/usr/local/bin:{{ user_home }}/.local/bin"
 
-- name: Install Ruby {{ mise_ruby_additional }} (additional version)
+- name: Install additional Ruby version ({{ mise_ruby_additional }})
   ansible.builtin.command:
     cmd: mise install ruby@{{ mise_ruby_additional }}
   register: ruby_additional_install
@@ -22,16 +22,16 @@
 - name: Install bundler gem
   ansible.builtin.command:
     cmd: mise exec ruby -- gem install bundler
-  register: bundler_install
-  changed_when: "'Successfully installed' in bundler_install.stdout"
+  register: ruby_bundler_install
+  changed_when: "'Successfully installed' in ruby_bundler_install.stdout"
   environment:
     PATH: "{{ ansible_env.PATH }}:/usr/local/bin:{{ user_home }}/.local/bin"
 
 - name: Install Rails gem
   ansible.builtin.command:
     cmd: mise exec ruby -- gem install rails
-  register: rails_install
-  changed_when: "'Successfully installed' in rails_install.stdout"
+  register: ruby_rails_install
+  changed_when: "'Successfully installed' in ruby_rails_install.stdout"
   environment:
     PATH: "{{ ansible_env.PATH }}:/usr/local/bin:{{ user_home }}/.local/bin"
 

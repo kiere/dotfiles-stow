@@ -2,7 +2,7 @@
 # Python installation via mise
 # Supports: All distros (uses mise)
 
-- name: Install Python {{ mise_python_version }} via mise
+- name: Install Python via mise ({{ mise_python_version }})
   ansible.builtin.command:
     cmd: mise use --global python@{{ mise_python_version }}
   register: python_install
@@ -13,8 +13,8 @@
 - name: Upgrade pip
   ansible.builtin.command:
     cmd: mise exec python -- pip install --upgrade pip
-  register: pip_upgrade
-  changed_when: "'Successfully installed' in pip_upgrade.stdout"
+  register: python_pip_upgrade
+  changed_when: "'Successfully installed' in python_pip_upgrade.stdout"
   environment:
     PATH: "{{ ansible_env.PATH }}:/usr/local/bin:{{ user_home }}/.local/bin"
 

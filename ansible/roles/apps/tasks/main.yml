@@ -224,10 +224,11 @@
 
 - name: Download and install Dropbox (Ubuntu/Pop!_OS)
   ansible.builtin.apt:
-    deb: https://www.dropbox.com/download?dl=packages/ubuntu/dropbox_2024.04.17_amd64.deb
+    deb: https://linux.dropbox.com/packages/ubuntu/dropbox_2024.04.17_amd64.deb
     state: present
   become: true
   when: ansible_distribution in distros_debian
+  # Note: Check https://www.dropbox.com/install-linux for latest version if this fails
 
 # Arch - dropbox from AUR
 - name: Install Dropbox from AUR (Arch)

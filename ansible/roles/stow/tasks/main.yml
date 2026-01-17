@@ -11,7 +11,7 @@
 - name: Check if dotfiles directory exists
   ansible.builtin.stat:
     path: "{{ dotfiles_dir }}"
-  register: dotfiles_check
+  register: stow_dotfiles_check
 
 - name: Apply stow packages
   ansible.builtin.command:
@@ -20,7 +20,7 @@
   register: stow_result
   changed_when: "'LINK' in stow_result.stderr"
   failed_when: false  # Don't fail if package doesn't exist
-  when: dotfiles_check.stat.exists
+  when: stow_dotfiles_check.stat.exists
 
 - name: Display stow results
   ansible.builtin.debug:
@@ -31,9 +31,9 @@
       {% endfor %}
 
       Note: Existing files may need manual resolution if conflicts occur.
-  when: dotfiles_check.stat.exists
+  when: stow_dotfiles_check.stat.exists
 
 - name: Warn if dotfiles directory not found
   ansible.builtin.debug:
     msg: "Warning: Dotfiles directory {{ dotfiles_dir }} not found. Clone your dotfiles repo first."
-  when: not dotfiles_check.stat.exists
+  when: not stow_dotfiles_check.stat.exists
