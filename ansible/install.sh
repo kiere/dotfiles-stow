@@ -53,8 +53,8 @@ info "Ansible version: $(ansible --version | head -1)"
 info "Installing Ansible Galaxy collections..."
 ansible-galaxy collection install -r "$SCRIPT_DIR/requirements.yml"
 
-# Run playbook
+# Run playbook (--ask-become-pass prompts for sudo password)
 info "Running Ansible playbook..."
-ansible-playbook -i "$SCRIPT_DIR/inventory/localhost.yml" "$SCRIPT_DIR/playbook.yml" "$@"
+ansible-playbook -K -i "$SCRIPT_DIR/inventory/localhost.yml" "$SCRIPT_DIR/playbook.yml" "$@"
 
 info "Installation complete!"
