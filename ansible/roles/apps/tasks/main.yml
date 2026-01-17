@@ -211,12 +211,18 @@
 # Dropbox (native for Nautilus/tray integration)
 # ============================================================
 
+# Dropbox needs to be downloaded directly (not in Fedora repos)
+# Check https://linux.dropbox.com/packages/fedora/ for latest version
 - name: Install Dropbox (Fedora)
   ansible.builtin.dnf:
-    name: dropbox
+    name: "https://linux.dropbox.com/packages/fedora/nautilus-dropbox-2025.05.20-1.fc42.x86_64.rpm"
     state: present
+    disable_gpg_check: true
   become: true
-  when: ansible_distribution in distros_fedora
+  when:
+    - ansible_distribution in distros_fedora
+    - ansible_architecture == "x86_64"
+  failed_when: false  # Don't fail if download unavailable
 
 # Ubuntu/Debian - download from Dropbox directly
 - name: Install Dropbox dependencies (Ubuntu/Pop!_OS)
