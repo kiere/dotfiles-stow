@@ -78,9 +78,7 @@ pkg_desktop_apps:
   - evince
   - obs-studio
 
-# Firewall
-pkg_firewall:
-  - ufw
+# Firewall - use firewalld for RHCSA consistency
 
 # PostgreSQL client
 pkg_postgres:

@@ -76,8 +76,8 @@
     - role: cups
       tags: [cups, printing]
 
-    - role: ufw
-      tags: [ufw, firewall, security]
+    - role: firewall
+      tags: [firewall, security]
 
     # AI coding tools
     - role: ai-tools

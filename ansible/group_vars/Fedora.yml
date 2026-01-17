@@ -82,9 +82,7 @@ pkg_desktop_apps:
   - evince
   - obs-studio
 
-# Firewall
-pkg_firewall:
-  - ufw
+# Firewall - firewalld is pre-installed on Fedora
 
 # PostgreSQL client
 pkg_postgres:

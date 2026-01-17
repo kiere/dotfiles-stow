@@ -1,0 +1,40 @@
+---
+# Elixir installation via mise
+# Supports: All distros (uses mise)
+
+- name: Install Elixir {{ mise_elixir_version }} via mise
+  ansible.builtin.command:
+    cmd: mise use --global elixir@{{ mise_elixir_version }}
+  register: elixir_install
+  changed_when: "'installed' in elixir_install.stdout or 'elixir@' in elixir_install.stdout"
+  environment:
+    PATH: "{{ ansible_env.PATH }}:/usr/local/bin:{{ user_home }}/.local/bin"
+
+- name: Install hex package manager
+  ansible.builtin.command:
+    cmd: mise exec elixir -- mix local.hex --force
+  changed_when: false
+  environment:
+    PATH: "{{ ansible_env.PATH }}:/usr/local/bin:{{ user_home }}/.local/bin"
+
+- name: Install rebar build tool
+  ansible.builtin.command:
+    cmd: mise exec elixir -- mix local.rebar --force
+  changed_when: false
+  environment:
+    PATH: "{{ ansible_env.PATH }}:/usr/local/bin:{{ user_home }}/.local/bin"
+
+- name: Install Phoenix framework
+  ansible.builtin.command:
+    cmd: mise exec elixir -- mix archive.install hex phx_new --force
+  changed_when: false
+  environment:
+    PATH: "{{ ansible_env.PATH }}:/usr/local/bin:{{ user_home }}/.local/bin"
+
+- name: Display Elixir installation complete
+  ansible.builtin.debug:
+    msg: |
+      Elixir {{ mise_elixir_version }} installed via mise!
+      - Hex package manager installed
+      - Rebar build tool installed
+      - Phoenix framework installed

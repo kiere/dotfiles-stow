@@ -1,0 +1,83 @@
+---
+# Firewall configuration
+# - Fedora: firewalld (already installed, ensure enabled)
+# - Arch: firewalld (install and enable for RHCSA consistency)
+# - Ubuntu/Pop!_OS: UFW (already installed, ensure enabled)
+
+# ============================================================
+# Fedora - firewalld is pre-installed, just ensure it's running
+# ============================================================
+- name: Ensure firewalld is enabled (Fedora)
+  ansible.builtin.systemd:
+    name: firewalld
+    enabled: true
+    state: started
+  become: true
+  when: ansible_distribution in distros_fedora
+
+# ============================================================
+# Arch - install and enable firewalld
+# ============================================================
+- name: Install firewalld (Arch)
+  ansible.builtin.package:
+    name: firewalld
+    state: present
+  become: true
+  when: ansible_distribution in distros_arch
+
+- name: Enable firewalld (Arch)
+  ansible.builtin.systemd:
+    name: firewalld
+    enabled: true
+    state: started
+  become: true
+  when: ansible_distribution in distros_arch
+
+# ============================================================
+# Ubuntu/Pop!_OS - UFW is pre-installed, ensure it's enabled
+# ============================================================
+- name: Ensure UFW is enabled (Ubuntu/Pop!_OS)
+  community.general.ufw:
+    state: enabled
+  become: true
+  when: ansible_distribution in distros_debian
+
+- name: Set UFW default policies (Ubuntu/Pop!_OS)
+  community.general.ufw:
+    direction: "{{ item.direction }}"
+    policy: "{{ item.policy }}"
+  become: true
+  loop:
+    - { direction: incoming, policy: deny }
+    - { direction: outgoing, policy: allow }
+  when: ansible_distribution in distros_debian
+
+- name: Allow SSH through UFW (Ubuntu/Pop!_OS)
+  community.general.ufw:
+    rule: allow
+    name: SSH
+  become: true
+  when: ansible_distribution in distros_debian
+
+# ============================================================
+# Status output
+# ============================================================
+- name: Display firewall status (Fedora/Arch)
+  ansible.builtin.debug:
+    msg: |
+      firewalld is enabled and running.
+
+      Useful commands:
+        firewall-cmd --state
+        firewall-cmd --list-all
+        firewall-cmd --get-active-zones
+  when: ansible_distribution in distros_fedora or ansible_distribution in distros_arch
+
+- name: Display firewall status (Ubuntu/Pop!_OS)
+  ansible.builtin.debug:
+    msg: |
+      UFW is enabled.
+
+      Useful commands:
+        sudo ufw status verbose
+  when: ansible_distribution in distros_debian

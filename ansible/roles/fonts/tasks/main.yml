@@ -1,0 +1,38 @@
+---
+# Fonts installation
+# Supports: Fedora, Ubuntu/Pop!_OS, Arch Linux/CachyOS
+
+- name: Install fonts from package manager
+  ansible.builtin.package:
+    name: "{{ pkg_fonts }}"
+    state: present
+  become: true
+
+# Nerd Font Symbols Only (for terminal icons)
+- name: Ensure fonts directory exists
+  ansible.builtin.file:
+    path: "{{ user_home }}/.local/share/fonts"
+    state: directory
+    mode: '0755'
+
+- name: Check if Nerd Font Symbols already installed
+  ansible.builtin.stat:
+    path: "{{ user_home }}/.local/share/fonts/SymbolsNerdFont-Regular.ttf"
+  register: nerd_font_check
+
+- name: Download Nerd Font Symbols Only
+  ansible.builtin.unarchive:
+    src: "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.4.0/NerdFontsSymbolsOnly.zip"
+    dest: "{{ user_home }}/.local/share/fonts"
+    remote_src: true
+  when: not nerd_font_check.stat.exists
+
+- name: Refresh font cache
+  ansible.builtin.command:
+    cmd: fc-cache -fv
+  changed_when: false
+  when: not nerd_font_check.stat.exists
+
+- name: Display fonts installation complete
+  ansible.builtin.debug:
+    msg: "Fonts installed: Cascadia Code, Noto fonts, Nerd Font Symbols"

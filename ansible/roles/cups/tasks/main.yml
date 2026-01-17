@@ -1,0 +1,31 @@
+---
+# CUPS printing system installation
+# Supports: Fedora, Ubuntu/Pop!_OS, Arch Linux/CachyOS
+
+- name: Install CUPS and printing packages
+  ansible.builtin.package:
+    name: "{{ pkg_cups }}"
+    state: present
+  become: true
+
+- name: Enable and start CUPS service
+  ansible.builtin.systemd:
+    name: cups
+    enabled: true
+    state: started
+  become: true
+
+- name: Enable and start Avahi daemon (for network printer discovery)
+  ansible.builtin.systemd:
+    name: avahi-daemon
+    enabled: true
+    state: started
+  become: true
+
+- name: Display CUPS installation complete
+  ansible.builtin.debug:
+    msg: |
+      CUPS printing system installed!
+
+      Web interface: http://localhost:631
+      GUI: system-config-printer

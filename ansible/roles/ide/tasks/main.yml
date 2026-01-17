@@ -1,0 +1,97 @@
+---
+# IDE and editor tools installation
+# Supports: Fedora, Ubuntu/Pop!_OS, Arch Linux/CachyOS
+
+- name: Install IDE tools from package manager
+  ansible.builtin.package:
+    name: "{{ pkg_ide }}"
+    state: present
+  become: true
+
+# lazygit - COPR on Fedora, binary on Ubuntu, official repos on Arch
+- name: Enable lazygit COPR repo (Fedora)
+  community.general.copr:
+    name: "{{ lazygit_copr_repo }}"
+    state: enabled
+  become: true
+  when:
+    - ansible_distribution in distros_fedora
+    - lazygit_copr_repo is defined
+
+- name: Install lazygit from COPR (Fedora)
+  ansible.builtin.dnf:
+    name: lazygit
+    state: present
+  become: true
+  when: ansible_distribution in distros_fedora
+
+- name: Install lazygit binary (Ubuntu/Pop!_OS)
+  when: ansible_distribution in distros_debian
+  block:
+    - name: Get latest lazygit release info
+      ansible.builtin.uri:
+        url: https://api.github.com/repos/jesseduffield/lazygit/releases/latest
+        return_content: true
+      register: lazygit_release
+
+    - name: Download lazygit binary
+      ansible.builtin.unarchive:
+        src: "https://github.com/jesseduffield/lazygit/releases/download/{{ lazygit_release.json.tag_name }}/lazygit_{{ lazygit_release.json.tag_name | regex_replace('^v', '') }}_Linux_x86_64.tar.gz"
+        dest: /usr/local/bin
+        remote_src: true
+        include:
+          - lazygit
+        mode: '0755'
+      become: true
+
+# Arch has lazygit in official repos (already in pkg_ide)
+
+# lazydocker via Homebrew (cross-distro, since not in most repos)
+- name: Check if Homebrew is installed
+  ansible.builtin.stat:
+    path: /home/linuxbrew/.linuxbrew/bin/brew
+  register: homebrew_check
+
+- name: Install lazydocker via Homebrew
+  community.general.homebrew:
+    name: lazydocker
+    state: present
+  when: homebrew_check.stat.exists
+  environment:
+    PATH: "/home/linuxbrew/.linuxbrew/bin:{{ ansible_env.PATH }}"
+
+# GitHub CLI - needs repo setup on Ubuntu
+- name: Setup GitHub CLI repo (Ubuntu/Pop!_OS)
+  when: ansible_distribution in distros_debian
+  become: true
+  block:
+    - name: Add GitHub CLI GPG key
+      ansible.builtin.get_url:
+        url: "{{ gh_repo_key }}"
+        dest: /usr/share/keyrings/githubcli-archive-keyring.gpg
+        mode: '0644'
+
+    - name: Add GitHub CLI repository
+      ansible.builtin.apt_repository:
+        repo: "{{ gh_repo }}"
+        state: present
+        filename: github-cli
+
+    - name: Install GitHub CLI
+      ansible.builtin.apt:
+        name: gh
+        state: present
+        update_cache: true
+
+# Fedora has gh in repos (already in pkg_ide)
+# Arch has github-cli in repos (already in pkg_ide)
+
+- name: Display IDE tools installation complete
+  ansible.builtin.debug:
+    msg: |
+      IDE tools installed!
+      - Neovim (configure with LazyVim)
+      - ripgrep, fd, fzf (fuzzy finding)
+      - lazygit (TUI git client)
+      - lazydocker (TUI docker client, if Homebrew available)
+      - GitHub CLI (gh)

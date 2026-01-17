@@ -1,0 +1,78 @@
+---
+# mise version manager installation
+# Supports: Fedora, Ubuntu/Pop!_OS, Arch Linux/CachyOS
+
+# Fedora - mise is in repos or COPR
+- name: Enable mise COPR repo (Fedora)
+  community.general.copr:
+    name: "{{ mise_copr_repo }}"
+    state: enabled
+  become: true
+  when:
+    - ansible_distribution in distros_fedora
+    - mise_copr_repo is defined
+
+- name: Install mise (Fedora)
+  ansible.builtin.dnf:
+    name: "{{ pkg_mise }}"
+    state: present
+  become: true
+  when: ansible_distribution in distros_fedora
+
+# Ubuntu/Pop!_OS - mise apt repository
+- name: Setup mise apt repository (Ubuntu/Pop!_OS)
+  when: ansible_distribution in distros_debian
+  become: true
+  block:
+    - name: Ensure keyrings directory exists
+      ansible.builtin.file:
+        path: /etc/apt/keyrings
+        state: directory
+        mode: '0755'
+
+    - name: Download mise GPG key
+      ansible.builtin.get_url:
+        url: "{{ mise_apt_key }}"
+        dest: /etc/apt/keyrings/mise-archive-keyring.asc
+        mode: '0644'
+
+    - name: Convert mise GPG key to binary format
+      ansible.builtin.command:
+        cmd: gpg --dearmor -o /etc/apt/keyrings/mise-archive-keyring.gpg /etc/apt/keyrings/mise-archive-keyring.asc
+        creates: /etc/apt/keyrings/mise-archive-keyring.gpg
+
+    - name: Add mise repository
+      ansible.builtin.apt_repository:
+        repo: "{{ mise_apt_repo }}"
+        state: present
+        filename: mise
+
+    - name: Install mise
+      ansible.builtin.apt:
+        name: "{{ pkg_mise }}"
+        state: present
+        update_cache: true
+
+# Arch/CachyOS - mise from AUR
+- name: Install mise from AUR (Arch-based)
+  kewlfft.aur.aur:
+    name: "{{ mise_aur_package }}"
+    state: present
+  when: ansible_distribution in distros_arch
+
+- name: Ensure mise is trusted
+  ansible.builtin.command:
+    cmd: mise trust --all
+  changed_when: false
+  environment:
+    PATH: "{{ ansible_env.PATH }}:/usr/local/bin"
+
+- name: Display mise installation complete
+  ansible.builtin.debug:
+    msg: |
+      mise installed!
+
+      Add to ~/.bashrc:
+        eval "$(mise activate bash)"
+
+      Or use the stow role to apply dotfiles with mise config.

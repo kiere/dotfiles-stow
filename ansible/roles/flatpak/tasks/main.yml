@@ -1,0 +1,39 @@
+---
+# Flatpak setup and app installation
+# Supports: Fedora, Ubuntu/Pop!_OS, Arch Linux/CachyOS
+
+- name: Install Flatpak
+  ansible.builtin.package:
+    name: flatpak
+    state: present
+  become: true
+
+# Fedora already has Flathub, but ensure it's there on all distros
+- name: Add Flathub repository (system-wide)
+  community.general.flatpak_remote:
+    name: flathub
+    flatpakrepo_url: https://dl.flathub.org/repo/flathub.flatpakrepo
+    state: present
+    method: system
+  become: true
+
+- name: Install Flatpak apps (system-wide)
+  community.general.flatpak:
+    name: "{{ item }}"
+    state: present
+    method: system
+  become: true
+  loop: "{{ flatpak_apps }}"
+
+- name: Display Flatpak installation complete
+  ansible.builtin.debug:
+    msg: |
+      Flatpak apps installed:
+      {% for app in flatpak_apps %}
+      - {{ app }}
+      {% endfor %}
+
+      Optional apps (use --tags flatpak-optional):
+      {% for app in flatpak_apps_optional %}
+      - {{ app }}
+      {% endfor %}

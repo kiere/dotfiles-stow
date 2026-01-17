@@ -1,0 +1,28 @@
+---
+# Podman installation (Docker alternative)
+# Note: Docker removed - it breaks libvirt/KVM networking with iptables rules
+# Supports: Fedora, Ubuntu/Pop!_OS, Arch Linux/CachyOS
+
+- name: Install Podman packages
+  ansible.builtin.package:
+    name: "{{ pkg_podman }}"
+    state: present
+  become: true
+
+- name: Enable podman socket for current user
+  ansible.builtin.systemd:
+    name: podman.socket
+    enabled: true
+    state: started
+    scope: user
+
+- name: Display Podman installation complete
+  ansible.builtin.debug:
+    msg: |
+      Podman installed!
+      - podman (Docker-compatible container runtime)
+      - podman-compose (docker-compose compatible)
+      - User socket enabled for rootless containers
+
+      Note: Docker was intentionally not installed to avoid
+      conflicts with libvirt/KVM networking (iptables rules).

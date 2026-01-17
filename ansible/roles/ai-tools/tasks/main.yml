@@ -1,0 +1,43 @@
+---
+# AI coding tools installation
+# Claude Code and OpenAI Codex (no npm required)
+# Supports: All distros
+
+# Claude Code - official installer
+- name: Check if Claude Code is installed
+  ansible.builtin.stat:
+    path: "{{ user_home }}/.claude/local/bin/claude"
+  register: claude_check
+
+- name: Install Claude Code
+  ansible.builtin.shell: |
+    curl -fsSL https://claude.ai/install.sh | bash
+  args:
+    creates: "{{ user_home }}/.claude/local/bin/claude"
+  when: not claude_check.stat.exists
+  environment:
+    HOME: "{{ user_home }}"
+
+# OpenAI Codex - via Homebrew (if available)
+- name: Check if Homebrew is installed
+  ansible.builtin.stat:
+    path: /home/linuxbrew/.linuxbrew/bin/brew
+  register: homebrew_check
+
+- name: Install OpenAI Codex via Homebrew
+  community.general.homebrew:
+    name: codex
+    state: present
+  when: homebrew_check.stat.exists
+  environment:
+    PATH: "/home/linuxbrew/.linuxbrew/bin:{{ ansible_env.PATH }}"
+  failed_when: false  # Don't fail if codex not available in Homebrew
+
+- name: Display AI tools installation complete
+  ansible.builtin.debug:
+    msg: |
+      AI tools installed:
+      - Claude Code: {{ 'installed' if claude_check.stat.exists or true else 'check ~/.claude' }}
+      - OpenAI Codex: {{ 'installed (if Homebrew available)' if homebrew_check.stat.exists else 'skipped (no Homebrew)' }}
+
+      To use Claude Code: claude
