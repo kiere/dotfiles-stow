@@ -2,12 +2,20 @@
 # mise version manager installation
 # Supports: Fedora, Ubuntu/Pop!_OS, Arch Linux/CachyOS
 
-# Fedora - mise is in official repos (Fedora 41+)
+# Fedora - mise from COPR
+- name: Enable mise COPR repo (Fedora)
+  community.general.copr:
+    name: "{{ mise_copr_repo }}"
+    state: enabled
+  become: true
+  when:
+    - ansible_distribution in distros_fedora
+    - mise_copr_repo is defined
+
 - name: Install mise (Fedora)
   ansible.builtin.dnf:
     name: "{{ pkg_mise }}"
     state: present
-    update_cache: true
   become: true
   when: ansible_distribution in distros_fedora
 

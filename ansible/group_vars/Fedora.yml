@@ -102,7 +102,8 @@ pkg_stow:
 lazygit_copr_repo: "dejan/lazygit"
 pkg_lazygit: lazygit
 
-# mise is in official Fedora repos (41+)
+# mise requires COPR (jdxcode/mise)
+mise_copr_repo: "jdxcode/mise"
 pkg_mise: mise
 
 # External repository URLs
