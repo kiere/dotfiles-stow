@@ -9,6 +9,7 @@ alias tree='eza --tree'
 alias du='dust'
 
 # Git aliases
+alias lg='lazygit'
 alias gst='git status'
 alias gc='git commit'
 alias gca='git commit -a'
