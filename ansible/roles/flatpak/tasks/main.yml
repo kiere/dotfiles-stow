@@ -32,6 +32,16 @@
     method: system
   become: true
   loop: "{{ flatpak_apps }}"
+  register: flatpak_result
+  failed_when: false
+
+- name: Report unavailable Flatpak apps
+  ansible.builtin.debug:
+    msg: "Note: {{ item.item }} not available (possibly not built for {{ ansible_architecture }})"
+  loop: "{{ flatpak_result.results }}"
+  when: item.failed | default(false)
+  loop_control:
+    label: "{{ item.item }}"
 
 - name: Display Flatpak installation complete
   ansible.builtin.debug:
