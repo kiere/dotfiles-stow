@@ -73,3 +73,6 @@ mise_bun_version: "latest"
 # 1Password GPG key for verification (Arch AUR)
 onepassword_gpg_key: "https://downloads.1password.com/linux/keys/1password.asc"
 onepassword_gpg_fingerprint: "3FEF9748469ADBE15DA7CA80AC2D62742012EA22"
+
+# AppImage URLs
+appimage_capacities_url: "https://capacities-desktop-app.fra1.cdn.digitaloceanspaces.com/Capacities-1.57.24.AppImage"

@@ -73,6 +73,9 @@
     - role: apps
       tags: [apps, desktop]
 
+    - role: appimages
+      tags: [appimages, apps, desktop]
+
     # Services and networking
     - role: tailscale
       tags: [tailscale, networking]

@@ -1,0 +1,45 @@
+---
+# AppImage installation
+# Downloads AppImages to ~/Applications and creates desktop entries
+
+- name: Create Applications directory
+  ansible.builtin.file:
+    path: "{{ user_home }}/Applications"
+    state: directory
+    mode: "0755"
+
+- name: Create local applications directory
+  ansible.builtin.file:
+    path: "{{ user_home }}/.local/share/applications"
+    state: directory
+    mode: "0755"
+
+# Capacities - note-taking app
+- name: Download Capacities AppImage
+  ansible.builtin.get_url:
+    url: "{{ appimage_capacities_url }}"
+    dest: "{{ user_home }}/Applications/Capacities.AppImage"
+    mode: "0755"
+  register: capacities_download
+
+- name: Create Capacities desktop entry
+  ansible.builtin.copy:
+    dest: "{{ user_home }}/.local/share/applications/capacities.desktop"
+    mode: "0644"
+    content: |
+      [Desktop Entry]
+      Name=Capacities
+      Comment=A studio for your mind
+      Exec={{ user_home }}/Applications/Capacities.AppImage %U
+      Terminal=false
+      Type=Application
+      Categories=Office;
+      StartupWMClass=Capacities
+
+- name: Display AppImages installation complete
+  ansible.builtin.debug:
+    msg: |
+      AppImages installed to ~/Applications:
+      - Capacities
+
+      Tip: Use Gear Lever (Flatpak) to manage AppImages with a GUI.
