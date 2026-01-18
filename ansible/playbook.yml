@@ -89,8 +89,9 @@
     - role: firewall
       tags: [firewall, security]
 
-    - role: snapper
-      tags: [snapper, btrfs, backup]
+    # TODO: Fix grub-btrfs ordering issues before re-enabling
+    # - role: snapper
+    #   tags: [snapper, btrfs, backup]
 
     # AI coding tools
     - role: ai-tools
