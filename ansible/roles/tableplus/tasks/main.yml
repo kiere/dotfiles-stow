@@ -55,14 +55,18 @@
 
     - name: Add TablePlus repository (Ubuntu x86_64)
       ansible.builtin.apt_repository:
-        repo: "deb [arch=amd64 signed-by=/etc/apt/keyrings/tableplus-archive-keyring.gpg] https://deb.tableplus.com/debian/{{ tableplus_ubuntu_version }} tableplus main"
+        repo: >-
+          deb [arch=amd64 signed-by=/etc/apt/keyrings/tableplus-archive-keyring.gpg]
+          https://deb.tableplus.com/debian/{{ tableplus_ubuntu_version }} tableplus main
         state: present
         filename: tableplus
       when: ansible_architecture == "x86_64"
 
     - name: Add TablePlus repository (Ubuntu ARM64)
       ansible.builtin.apt_repository:
-        repo: "deb [arch=arm64 signed-by=/etc/apt/keyrings/tableplus-archive-keyring.gpg] https://deb.tableplus.com/debian/{{ tableplus_ubuntu_version }}-arm tableplus main"
+        repo: >-
+          deb [arch=arm64 signed-by=/etc/apt/keyrings/tableplus-archive-keyring.gpg]
+          https://deb.tableplus.com/debian/{{ tableplus_ubuntu_version }}-arm tableplus main
         state: present
         filename: tableplus
       when: ansible_architecture == "aarch64"

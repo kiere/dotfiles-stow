@@ -20,7 +20,7 @@
     url: "{{ appimage_capacities_url }}"
     dest: "{{ user_home }}/Applications/Capacities.AppImage"
     mode: "0755"
-  register: capacities_download
+  register: appimages_capacities_download
 
 - name: Create Capacities desktop entry
   ansible.builtin.copy:
