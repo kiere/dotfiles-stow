@@ -91,6 +91,17 @@ pkg_desktop_apps:
   - evince
   - obs-studio
 
+# Virtualization (KVM/QEMU/libvirt)
+pkg_virtualization:
+  - qemu-kvm
+  - libvirt-daemon-system
+  - libvirt-clients
+  - virt-manager
+  - virt-viewer
+  - bridge-utils
+  - ovmf  # UEFI support
+  - gnome-boxes
+
 # Firewall - UFW is pre-installed on Ubuntu/Pop!_OS
 
 # PostgreSQL client

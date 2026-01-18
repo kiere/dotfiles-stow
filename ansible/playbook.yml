@@ -66,6 +66,10 @@
     - role: podman
       tags: [podman, containers]
 
+    # Virtualization
+    - role: virtualization
+      tags: [virtualization, kvm, qemu, libvirt]
+
     # Desktop applications
     - role: flatpak
       tags: [flatpak, apps]

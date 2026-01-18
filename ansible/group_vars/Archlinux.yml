@@ -83,6 +83,18 @@ pkg_desktop_apps:
   - evince
   - obs-studio
 
+# Virtualization (KVM/QEMU/libvirt)
+pkg_virtualization:
+  - qemu-full
+  - libvirt
+  - virt-manager
+  - virt-viewer
+  - dnsmasq
+  - bridge-utils
+  - openbsd-netcat
+  - edk2-ovmf  # UEFI support
+  - gnome-boxes
+
 # Firewall - use firewalld for RHCSA consistency
 
 # PostgreSQL client

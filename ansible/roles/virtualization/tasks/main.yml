@@ -1,0 +1,79 @@
+---
+# KVM/QEMU/libvirt virtualization setup
+# Supports: Fedora, Ubuntu/Pop!_OS, Arch Linux/CachyOS
+
+# ============================================================
+# Fedora - use @virtualization group
+# ============================================================
+- name: Install virtualization group (Fedora)
+  ansible.builtin.dnf:
+    name: "@virtualization"
+    state: present
+  become: true
+  when: ansible_distribution in distros_fedora
+
+- name: Install virtualization GUI tools (Fedora)
+  ansible.builtin.dnf:
+    name:
+      - virt-manager
+      - gnome-boxes
+    state: present
+  become: true
+  when: ansible_distribution in distros_fedora
+
+# ============================================================
+# Arch - install packages individually
+# ============================================================
+- name: Install virtualization packages (Arch)
+  ansible.builtin.package:
+    name: "{{ pkg_virtualization }}"
+    state: present
+  become: true
+  when: ansible_distribution in distros_arch
+
+# ============================================================
+# Ubuntu - install packages individually
+# ============================================================
+- name: Install virtualization packages (Ubuntu)
+  ansible.builtin.package:
+    name: "{{ pkg_virtualization }}"
+    state: present
+  become: true
+  when: ansible_distribution in distros_debian
+
+# ============================================================
+# Common setup (all distros)
+# ============================================================
+- name: Add user to libvirt group
+  ansible.builtin.user:
+    name: "{{ ansible_user_id }}"
+    groups: libvirt
+    append: true
+  become: true
+
+- name: Enable and start libvirtd service
+  ansible.builtin.systemd:
+    name: libvirtd
+    enabled: true
+    state: started
+  become: true
+
+- name: Enable virtnetworkd for virtual networking
+  ansible.builtin.systemd:
+    name: virtnetworkd
+    enabled: true
+    state: started
+  become: true
+  failed_when: false  # May not exist on all systems
+
+- name: Display virtualization setup complete
+  ansible.builtin.debug:
+    msg: |
+      Virtualization configured!
+      - KVM/QEMU/libvirt installed
+      - virt-manager and Gnome Boxes available
+      - User added to libvirt group (log out/in to take effect)
+      - libvirtd service enabled and started
+
+      Note: Both virt-manager and Gnome Boxes use libvirt as backend.
+      Use virt-manager for advanced VM management, Gnome Boxes for quick/simple VMs.
