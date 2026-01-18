@@ -40,3 +40,13 @@ Use 3 parallel agents to explore the 3 possible solutions, then synthesize and r
 ### Verification is Critical
 Always validate the combined plan against the original requirements. 1:3:1 solves architectural decisions but does not guarantee requirement coverage. A separate validation step ensures nothing is missed.
 
+## Containers
+
+I use **Podman** instead of Docker. When providing examples or running commands, use `podman` and `podman-compose`.
+
+However, all artifacts must remain **Docker-compatible**:
+- Use `docker-compose.yml` (not `podman-compose.yml`)
+- Use standard Dockerfile syntax
+- Avoid Podman-specific features in committed files
+
+This allows teammates using Docker to work seamlessly without knowing I use Podman.
