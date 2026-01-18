@@ -89,6 +89,9 @@
     - role: firewall
       tags: [firewall, security]
 
+    - role: snapper
+      tags: [snapper, btrfs, backup]
+
     # AI coding tools
     - role: ai-tools
       tags: [ai-tools, ai]

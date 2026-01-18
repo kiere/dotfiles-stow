@@ -1,0 +1,174 @@
+---
+# Snapper btrfs snapshot configuration
+# Supports: Fedora (with grub-btrfs), Ubuntu, Arch
+
+# ============================================================
+# Install snapper packages
+# ============================================================
+- name: Install snapper packages
+  ansible.builtin.package:
+    name: "{{ pkg_snapper }}"
+    state: present
+  become: true
+
+# ============================================================
+# Fedora - grub-btrfs for bootable snapshots
+# ============================================================
+- name: Setup grub-btrfs (Fedora)
+  when: ansible_distribution in distros_fedora
+  become: true
+  block:
+    - name: Enable grub-btrfs COPR
+      community.general.copr:
+        name: kylegospo/grub-btrfs
+        state: enabled
+
+    - name: Install grub-btrfs
+      ansible.builtin.dnf:
+        name: grub-btrfs
+        state: present
+
+    - name: Enable grub-btrfs path unit
+      ansible.builtin.systemd:
+        name: grub-btrfs.path
+        enabled: true
+        state: started
+
+# ============================================================
+# Arch - snap-pac for automatic pacman hooks + bootable snapshots
+# ============================================================
+- name: Setup snapper integration (Arch)
+  when: ansible_distribution in distros_arch
+  block:
+    - name: Install snap-pac for pacman hooks
+      kewlfft.aur.aur:
+        name: snap-pac
+        state: present
+
+    - name: Check if Limine bootloader is installed
+      ansible.builtin.command:
+        cmd: which limine
+      register: limine_check
+      failed_when: false
+      changed_when: false
+
+    - name: Install limine-snapper-sync (Limine bootloader)
+      ansible.builtin.package:
+        name:
+          - limine-snapper-sync
+          - limine-mkinitcpio-hook
+        state: present
+      become: true
+      when: limine_check.rc == 0
+
+    - name: Enable limine-snapper-sync service
+      ansible.builtin.systemd:
+        name: limine-snapper-sync.service
+        enabled: true
+        state: started
+      become: true
+      when: limine_check.rc == 0
+
+    - name: Install grub-btrfs (GRUB bootloader)
+      kewlfft.aur.aur:
+        name: grub-btrfs
+        state: present
+      when: limine_check.rc != 0
+
+    - name: Enable grub-btrfs path unit (GRUB)
+      ansible.builtin.systemd:
+        name: grub-btrfs.path
+        enabled: true
+        state: started
+      become: true
+      when: limine_check.rc != 0
+
+# ============================================================
+# Create snapper configs (all distros)
+# ============================================================
+- name: Check if root snapper config exists
+  ansible.builtin.command:
+    cmd: snapper -c root list-configs
+  register: snapper_root_check
+  failed_when: false
+  changed_when: false
+  become: true
+
+- name: Create snapper config for root
+  ansible.builtin.command:
+    cmd: snapper -c root create-config /
+  become: true
+  when: snapper_root_check.rc != 0
+
+- name: Check if home snapper config exists
+  ansible.builtin.command:
+    cmd: snapper -c home list-configs
+  register: snapper_home_check
+  failed_when: false
+  changed_when: false
+  become: true
+
+- name: Create snapper config for home
+  ansible.builtin.command:
+    cmd: snapper -c home create-config /home
+  become: true
+  when: snapper_home_check.rc != 0
+  failed_when: false  # May fail if /home is not a separate subvolume
+
+# ============================================================
+# Configure snapper settings (conservative limits)
+# ============================================================
+- name: Configure snapper - disable timeline snapshots
+  ansible.builtin.lineinfile:
+    path: "/etc/snapper/configs/{{ item }}"
+    regexp: '^TIMELINE_CREATE='
+    line: 'TIMELINE_CREATE="no"'
+  become: true
+  loop:
+    - root
+    - home
+  failed_when: false
+
+- name: Configure snapper - set snapshot limits
+  ansible.builtin.lineinfile:
+    path: "/etc/snapper/configs/{{ item.config }}"
+    regexp: "^{{ item.key }}="
+    line: '{{ item.key }}="{{ item.value }}"'
+  become: true
+  loop:
+    - { config: root, key: NUMBER_LIMIT, value: "5" }
+    - { config: root, key: NUMBER_LIMIT_IMPORTANT, value: "5" }
+    - { config: root, key: SPACE_LIMIT, value: "0.3" }
+    - { config: root, key: FREE_LIMIT, value: "0.3" }
+    - { config: home, key: NUMBER_LIMIT, value: "5" }
+    - { config: home, key: NUMBER_LIMIT_IMPORTANT, value: "5" }
+    - { config: home, key: SPACE_LIMIT, value: "0.3" }
+    - { config: home, key: FREE_LIMIT, value: "0.3" }
+  failed_when: false
+
+# ============================================================
+# Enable btrfs quota for space-aware cleanup
+# ============================================================
+- name: Enable btrfs quota on root
+  ansible.builtin.command:
+    cmd: btrfs quota enable /
+  become: true
+  changed_when: false
+  failed_when: false
+
+- name: Display snapper installation complete
+  ansible.builtin.debug:
+    msg: |
+      Snapper configured!
+      - Root and home snapshot configs created
+      - Timeline snapshots disabled (package manager triggers only)
+      - Conservative limits: 5 snapshots, 30% space limit
+      {% if ansible_distribution in distros_fedora %}
+      - grub-btrfs installed: snapshots appear in GRUB boot menu
+      - Automatic snapshots on dnf transactions via dnf-plugin-snapper
+      {% elif ansible_distribution in distros_arch %}
+      - snap-pac installed: automatic snapshots on pacman transactions
+      - Bootable snapshots via {{ 'limine-snapper-sync' if limine_check.rc == 0 else 'grub-btrfs' }}
+      {% else %}
+      - Note: No automatic snapshot hooks for apt (manual snapshots only)
+      {% endif %}
