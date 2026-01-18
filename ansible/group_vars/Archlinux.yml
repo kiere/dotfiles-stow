@@ -26,6 +26,10 @@ pkg_rust:
 pkg_utilities:
   - inotify-tools
 
+# System/hardware support
+pkg_system:
+  - bolt  # Thunderbolt device authorization
+
 # CLI tools (most are in official repos - Arch advantage!)
 pkg_cli_tools:
   - btop

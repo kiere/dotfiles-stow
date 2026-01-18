@@ -26,6 +26,12 @@
     state: present
   become: true
 
+- name: Install system/hardware support packages
+  ansible.builtin.package:
+    name: "{{ pkg_system }}"
+    state: present
+  become: true
+
 - name: Display dev-tools installation complete
   ansible.builtin.debug:
     msg: |
@@ -36,5 +42,6 @@
       - Development headers (openssl, readline, zlib, etc.)
       - Rust toolchain
       - Utility packages (inotify-tools)
+      - System/hardware support (bolt for Thunderbolt)
 
       Next: Run the mise role for version manager

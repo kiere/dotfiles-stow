@@ -35,6 +35,10 @@ pkg_rust:
 pkg_utilities:
   - inotify-tools
 
+# System/hardware support
+pkg_system:
+  - bolt  # Thunderbolt device authorization
+
 # CLI tools
 pkg_cli_tools:
   - btop
