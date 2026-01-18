@@ -113,6 +113,14 @@ pkg_snapper:
   - snapper
   # Note: apt-btrfs-snapshot is different from DNF plugin
 
+# Homebrew dependencies
+pkg_homebrew_deps:
+  - build-essential
+  - procps
+  - curl
+  - file
+  - git
+
 # Stow
 pkg_stow:
   - stow

@@ -106,6 +106,14 @@ pkg_snapper:
   - snapper
   # Note: No DNF plugin equivalent, use snapper directly
 
+# Homebrew dependencies
+pkg_homebrew_deps:
+  - base-devel
+  - procps-ng
+  - curl
+  - file
+  - git
+
 # Stow
 pkg_stow:
   - stow

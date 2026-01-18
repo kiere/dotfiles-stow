@@ -98,6 +98,13 @@ pkg_snapper:
   - snapper
   - python3-dnf-plugin-snapper
 
+# Homebrew dependencies
+pkg_homebrew_deps:
+  - procps-ng
+  - curl
+  - file
+  - git
+
 # Stow
 pkg_stow:
   - stow

@@ -39,6 +39,9 @@
     - role: cli-tools
       tags: [cli-tools, cli, core]
 
+    - role: homebrew
+      tags: [homebrew, brew, core]
+
     - role: fonts
       tags: [fonts, core]
 

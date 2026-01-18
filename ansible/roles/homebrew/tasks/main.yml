@@ -1,0 +1,58 @@
+---
+# Homebrew installation for Linux
+# Supports: Fedora, Ubuntu/Pop!_OS, Arch Linux/CachyOS
+
+- name: Check if Homebrew is already installed
+  ansible.builtin.stat:
+    path: /home/linuxbrew/.linuxbrew/bin/brew
+  register: homebrew_check
+
+- name: Install Homebrew
+  when: not homebrew_check.stat.exists
+  block:
+    # Fedora dependencies
+    - name: Install Homebrew dependencies (Fedora)
+      ansible.builtin.dnf:
+        name: "{{ pkg_homebrew_deps }}"
+        state: present
+      become: true
+      when: ansible_distribution in distros_fedora
+
+    # Ubuntu/Pop!_OS dependencies
+    - name: Install Homebrew dependencies (Ubuntu/Pop!_OS)
+      ansible.builtin.apt:
+        name: "{{ pkg_homebrew_deps }}"
+        state: present
+        update_cache: true
+      become: true
+      when: ansible_distribution in distros_debian
+
+    # Arch/CachyOS dependencies
+    - name: Install Homebrew dependencies (Arch-based)
+      community.general.pacman:
+        name: "{{ pkg_homebrew_deps }}"
+        state: present
+      become: true
+      when: ansible_distribution in distros_arch
+
+    - name: Install Homebrew
+      ansible.builtin.shell: |
+        NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+      args:
+        creates: /home/linuxbrew/.linuxbrew/bin/brew
+
+- name: Verify Homebrew installation
+  ansible.builtin.command:
+    cmd: /home/linuxbrew/.linuxbrew/bin/brew --version
+  register: brew_version
+  changed_when: false
+
+- name: Display Homebrew installation complete
+  ansible.builtin.debug:
+    msg: |
+      Homebrew installed: {{ brew_version.stdout_lines[0] }}
+
+      Add to ~/.bashrc:
+        eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+
+      Or use the stow role to apply dotfiles with Homebrew config.
