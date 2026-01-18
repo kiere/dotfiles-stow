@@ -63,11 +63,15 @@
       loop_control:
         label: "{{ item.item }}"
 
-    - name: Ensure .local/bin exists (prevents stow folding for bin package)
+    - name: Ensure directories exist (prevents stow folding)
       ansible.builtin.file:
-        path: "{{ user_home }}/.local/bin"
+        path: "{{ item }}"
         state: directory
         mode: "0755"
+      loop:
+        - "{{ user_home }}/.local/bin"
+        - "{{ user_home }}/.claude"
+        - "{{ user_home }}/.var/app/it.mijorus.gearlever/config"
 
     - name: Apply stow packages
       ansible.builtin.command:
