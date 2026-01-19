@@ -1,5 +1,6 @@
 [tools]
-elixir = "1.19.5"
-erlang = "28.3.1"
-python = "3.14.2"
-ruby = "3.4.8"
+bun = "latest"
+elixir = "latest"
+erlang = "latest"
+python = "latest"
+ruby = "4.0"

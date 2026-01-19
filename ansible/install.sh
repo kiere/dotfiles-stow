@@ -17,34 +17,40 @@ NC='\033[0m' # No Color
 info() { echo -e "${GREEN}[INFO]${NC} $1"; }
 warn() { echo -e "${YELLOW}[WARN]${NC} $1"; }
 
-# Check for ansible
-if ! command -v ansible-playbook &> /dev/null; then
-  echo "Ansible not found. Installing..."
+# Install mise if not present
+if ! command -v mise &> /dev/null; then
+  info "Installing mise..."
+  curl https://mise.run | sh
+  export PATH="$HOME/.local/bin:$PATH"
+fi
 
-  # Detect distro and install ansible
-  if [ -f /etc/os-release ]; then
-    . /etc/os-release
-    case "$ID" in
-      fedora)
-        sudo dnf install -y ansible
-        ;;
-      ubuntu|pop)
-        sudo apt-get update
-        sudo apt-get install -y ansible
-        ;;
-      arch|cachyos)
-        sudo pacman -S --needed --noconfirm ansible
-        ;;
-      *)
-        echo "Unsupported distribution: $ID"
-        echo "Please install Ansible manually and re-run this script."
-        exit 1
-        ;;
-    esac
-  else
-    echo "Cannot detect distribution. Please install Ansible manually."
-    exit 1
-  fi
+# Activate mise for this shell session
+eval "$(mise activate bash)"
+
+# Create .mise.toml if no mise config exists (check current dir and parent)
+if [ ! -f "$SCRIPT_DIR/.mise.toml" ] && [ ! -f "$SCRIPT_DIR/mise.toml" ] && \
+   [ ! -f "$(dirname "$SCRIPT_DIR")/.mise.toml" ] && [ ! -f "$(dirname "$SCRIPT_DIR")/mise.toml" ]; then
+  info "Creating .mise.toml with Python..."
+  cat > "$SCRIPT_DIR/.mise.toml" << 'EOF'
+[tools]
+python = "latest"
+EOF
+fi
+
+# Install Python via mise and trust the directory
+info "Setting up Python via mise..."
+mise trust "$SCRIPT_DIR" 2>/dev/null || true
+mise install --cd "$SCRIPT_DIR"
+
+# Activate mise again to pick up Python
+eval "$(mise activate bash)"
+cd "$SCRIPT_DIR"
+
+# Install ansible via pip if not present
+if ! command -v ansible-playbook &> /dev/null; then
+  info "Installing Ansible via pip..."
+  pip install --upgrade pip
+  pip install ansible
 fi
 
 info "Ansible version: $(ansible --version | head -1)"
