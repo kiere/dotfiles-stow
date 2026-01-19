@@ -8,6 +8,7 @@
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+DOTFILES_DIR="$(dirname "$SCRIPT_DIR")"
 
 # Colors for output
 GREEN='\033[0;32m'
@@ -16,6 +17,73 @@ NC='\033[0m' # No Color
 
 info() { echo -e "${GREEN}[INFO]${NC} $1"; }
 warn() { echo -e "${YELLOW}[WARN]${NC} $1"; }
+
+# Detect distro for package manager
+detect_distro() {
+  if [ -f /etc/os-release ]; then
+    . /etc/os-release
+    echo "$ID"
+  else
+    echo "unknown"
+  fi
+}
+
+DISTRO=$(detect_distro)
+
+# Install stow via package manager (needed for early stow of bash/mise configs)
+install_stow() {
+  if command -v stow &> /dev/null; then
+    return
+  fi
+
+  info "Installing stow..."
+  case "$DISTRO" in
+    fedora)
+      sudo dnf install -y stow
+      ;;
+    ubuntu|pop)
+      sudo apt-get update
+      sudo apt-get install -y stow
+      ;;
+    arch|cachyos)
+      sudo pacman -S --needed --noconfirm stow
+      ;;
+    *)
+      warn "Unknown distro, attempting to install stow anyway..."
+      sudo dnf install -y stow 2>/dev/null || sudo apt-get install -y stow 2>/dev/null || sudo pacman -S --needed --noconfirm stow 2>/dev/null
+      ;;
+  esac
+}
+
+# Stow essential packages early (bash config with mise activation, mise global config)
+# This prevents the stow role from breaking ansible mid-playbook
+stow_essentials() {
+  info "Stowing essential configs (bash, mise)..."
+
+  # Backup existing files if they exist and aren't symlinks
+  local timestamp
+  timestamp=$(date +%Y%m%dT%H%M%S)
+
+  for file in ~/.bashrc ~/.bash_profile ~/.bash_logout ~/.config/mise/config.toml; do
+    if [ -e "$file" ] && [ ! -L "$file" ]; then
+      info "Backing up $file to ${file}.bak.${timestamp}"
+      mv "$file" "${file}.bak.${timestamp}"
+    fi
+  done
+
+  # Ensure .config/mise directory exists (prevents stow folding)
+  mkdir -p ~/.config/mise
+
+  # Stow bash and mise packages
+  stow -v -d "$DOTFILES_DIR" -t "$HOME" bash mise
+}
+
+install_stow
+stow_essentials
+
+# Source the new bashrc to get mise activation
+# shellcheck disable=SC1091
+source ~/.bashrc
 
 # Install mise if not present
 if ! command -v mise &> /dev/null; then
@@ -27,20 +95,10 @@ fi
 # Activate mise for this shell session
 eval "$(mise activate bash)"
 
-# Create .mise.toml if no mise config exists (check current dir and parent)
-if [ ! -f "$SCRIPT_DIR/.mise.toml" ] && [ ! -f "$SCRIPT_DIR/mise.toml" ] && \
-   [ ! -f "$(dirname "$SCRIPT_DIR")/.mise.toml" ] && [ ! -f "$(dirname "$SCRIPT_DIR")/mise.toml" ]; then
-  info "Creating .mise.toml with Python..."
-  cat > "$SCRIPT_DIR/.mise.toml" << 'EOF'
-[tools]
-python = "latest"
-EOF
-fi
-
-# Install Python via mise and trust the directory
-info "Setting up Python via mise..."
-mise trust "$SCRIPT_DIR" 2>/dev/null || true
-mise install --cd "$SCRIPT_DIR"
+# Install tools via mise (Python is defined in ~/.config/mise/config.toml)
+info "Setting up tools via mise..."
+mise trust 2>/dev/null || true
+mise install
 
 # Activate mise again to pick up Python
 eval "$(mise activate bash)"

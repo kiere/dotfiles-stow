@@ -29,12 +29,22 @@ if [ -d ~/.bashrc.d ]; then
     done
 fi
 unset rc
-eval "$(/usr/bin/mise activate bash)"
+# mise (version manager)
+if command -v mise &> /dev/null; then
+    eval "$(mise activate bash)"
+fi
 
-eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+# Homebrew
+if [ -x /home/linuxbrew/.linuxbrew/bin/brew ]; then
+    eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+fi
 
 # zoxide (smarter cd with frecency)
-eval "$(zoxide init bash)"
+if command -v zoxide &> /dev/null; then
+    eval "$(zoxide init bash)"
+fi
 
 # starship prompt (must be last)
-eval "$(starship init bash)"
+if command -v starship &> /dev/null; then
+    eval "$(starship init bash)"
+fi
