@@ -67,8 +67,8 @@ cleanup() {
 }
 trap cleanup EXIT
 
-# Run playbook
+# Run playbook (-K passes sudo password to Ansible's become mechanism)
 info "Running Ansible playbook..."
-ansible-playbook -i "$SCRIPT_DIR/inventory/localhost.yml" "$SCRIPT_DIR/playbook.yml" "$@"
+ansible-playbook -K -i "$SCRIPT_DIR/inventory/localhost.yml" "$SCRIPT_DIR/playbook.yml" "$@"
 
 info "Installation complete!"

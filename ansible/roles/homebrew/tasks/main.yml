@@ -35,6 +35,15 @@
       become: true
       when: ansible_distribution in distros_arch
 
+    - name: Create Homebrew directory
+      ansible.builtin.file:
+        path: /home/linuxbrew/.linuxbrew
+        state: directory
+        owner: "{{ ansible_facts['user_id'] }}"
+        group: "{{ ansible_facts['user_id'] }}"
+        mode: "0755"
+      become: true
+
     - name: Install Homebrew
       ansible.builtin.shell: |
         NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
