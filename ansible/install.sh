@@ -82,8 +82,11 @@ install_stow
 stow_essentials
 
 # Source the new bashrc to get mise activation
+# Temporarily disable unbound variable check (system bashrc may have unset vars)
 # shellcheck disable=SC1091
+set +u
 source ~/.bashrc
+set -u
 
 # Install mise if not present
 if ! command -v mise &> /dev/null; then
