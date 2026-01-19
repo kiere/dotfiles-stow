@@ -1,7 +1,10 @@
-  {
-    "permissions": {
-      "allow": [
-        "WebFetch(domain:guides.rubyonrails.org)"
-      ]
-    }
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:guides.rubyonrails.org)"
+    ]
+  },
+  "enabledPlugins": {
+    "planning-with-files@planning-with-files": true
   }
+}
