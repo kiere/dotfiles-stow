@@ -30,10 +30,33 @@
 
 # Arch has starship in official repos (already in pkg_cli_tools)
 
+# yazi - terminal file manager
+- name: Enable yazi COPR repo (Fedora)
+  community.general.copr:
+    name: "{{ yazi_copr_repo }}"
+    state: enabled
+  become: true
+  when:
+    - ansible_facts['distribution'] in distros_fedora
+    - yazi_copr_repo is defined
+
+- name: Install yazi (Fedora)
+  ansible.builtin.dnf:
+    name: "{{ pkg_yazi }}"
+    state: present
+  become: true
+  when:
+    - ansible_facts['distribution'] in distros_fedora
+    - pkg_yazi is defined
+
+# Arch has yazi in official repos (already in pkg_cli_tools)
+
 - name: Display CLI tools installation complete
   ansible.builtin.debug:
     msg: |
       CLI tools installed!
+      - yazi (terminal file manager)
+      - btop, dust, bat, zoxide, starship, etc.
 
       Add to ~/.bashrc:
         eval "$(zoxide init bash)"

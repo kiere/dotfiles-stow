@@ -51,6 +51,10 @@ pkg_cli_tools:
   - tldr
   - gum
 
+# yazi requires COPR
+yazi_copr_repo: "lihaohong/yazi"
+pkg_yazi: yazi
+
 # IDE and editor tools
 pkg_ide:
   - neovim

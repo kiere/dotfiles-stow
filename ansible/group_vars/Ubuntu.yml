@@ -53,6 +53,7 @@ pkg_cli_tools:
 # gum: needs Charm repo
 # yq: snap or binary install
 # dust: cargo install or .deb
+# yazi: cargo install or binary download
 
 # IDE and editor tools
 pkg_ide:

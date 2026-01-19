@@ -44,6 +44,7 @@ pkg_cli_tools:
   - tldr
   - gum          # In official repos on Arch
   - starship     # In official repos on Arch
+  - yazi         # Terminal file manager
 
 # IDE and editor tools
 pkg_ide:
