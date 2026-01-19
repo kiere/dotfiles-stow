@@ -9,7 +9,7 @@
     state: enabled
   become: true
   when:
-    - ansible_distribution in distros_fedora
+    - ansible_facts['distribution'] in distros_fedora
     - mise_copr_repo is defined
 
 - name: Install mise (Fedora)
@@ -17,11 +17,11 @@
     name: "{{ pkg_mise }}"
     state: present
   become: true
-  when: ansible_distribution in distros_fedora
+  when: ansible_facts['distribution'] in distros_fedora
 
 # Ubuntu/Pop!_OS - mise apt repository
 - name: Setup mise apt repository (Ubuntu/Pop!_OS)
-  when: ansible_distribution in distros_debian
+  when: ansible_facts['distribution'] in distros_debian
   become: true
   block:
     - name: Ensure keyrings directory exists
@@ -58,14 +58,14 @@
   kewlfft.aur.aur:
     name: "{{ mise_aur_package }}"
     state: present
-  when: ansible_distribution in distros_arch
+  when: ansible_facts['distribution'] in distros_arch
 
 - name: Ensure mise is trusted
   ansible.builtin.command:
     cmd: mise trust --all
   changed_when: false
   environment:
-    PATH: "{{ ansible_env.PATH }}:/usr/local/bin"
+    PATH: "{{ ansible_facts['env']['PATH'] }}:/usr/local/bin"
 
 - name: Display mise installation complete
   ansible.builtin.debug:

@@ -13,7 +13,7 @@
     enabled: true
     state: started
   become: true
-  when: ansible_distribution in distros_fedora
+  when: ansible_facts['distribution'] in distros_fedora
 
 # ============================================================
 # Arch - install and enable firewalld
@@ -23,7 +23,7 @@
     name: firewalld
     state: present
   become: true
-  when: ansible_distribution in distros_arch
+  when: ansible_facts['distribution'] in distros_arch
 
 - name: Enable firewalld (Arch)
   ansible.builtin.systemd:
@@ -31,7 +31,7 @@
     enabled: true
     state: started
   become: true
-  when: ansible_distribution in distros_arch
+  when: ansible_facts['distribution'] in distros_arch
 
 # ============================================================
 # Ubuntu/Pop!_OS - UFW is pre-installed, ensure it's enabled
@@ -40,7 +40,7 @@
   community.general.ufw:
     state: enabled
   become: true
-  when: ansible_distribution in distros_debian
+  when: ansible_facts['distribution'] in distros_debian
 
 - name: Set UFW default policies (Ubuntu/Pop!_OS)
   community.general.ufw:
@@ -50,14 +50,14 @@
   loop:
     - { direction: incoming, policy: deny }
     - { direction: outgoing, policy: allow }
-  when: ansible_distribution in distros_debian
+  when: ansible_facts['distribution'] in distros_debian
 
 - name: Allow SSH through UFW (Ubuntu/Pop!_OS)
   community.general.ufw:
     rule: allow
     name: SSH
   become: true
-  when: ansible_distribution in distros_debian
+  when: ansible_facts['distribution'] in distros_debian
 
 # ============================================================
 # Status output
@@ -71,7 +71,7 @@
         firewall-cmd --state
         firewall-cmd --list-all
         firewall-cmd --get-active-zones
-  when: ansible_distribution in distros_fedora or ansible_distribution in distros_arch
+  when: ansible_facts['distribution'] in distros_fedora or ansible_facts['distribution'] in distros_arch
 
 - name: Display firewall status (Ubuntu/Pop!_OS)
   ansible.builtin.debug:
@@ -80,4 +80,4 @@
 
       Useful commands:
         sudo ufw status verbose
-  when: ansible_distribution in distros_debian
+  when: ansible_facts['distribution'] in distros_debian

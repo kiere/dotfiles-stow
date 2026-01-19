@@ -6,7 +6,7 @@
 # Fedora - native dnf repository
 # ============================================================
 - name: Setup TablePlus (Fedora)
-  when: ansible_distribution in distros_fedora
+  when: ansible_facts['distribution'] in distros_fedora
   become: true
   block:
     - name: Add TablePlus repository (Fedora x86_64)
@@ -14,14 +14,14 @@
         url: https://yum.tableplus.com/rpm/x86_64/tableplus.repo
         dest: /etc/yum.repos.d/tableplus.repo
         mode: "0644"
-      when: ansible_architecture == "x86_64"
+      when: ansible_facts['architecture'] == "x86_64"
 
     - name: Add TablePlus repository (Fedora ARM64)
       ansible.builtin.get_url:
         url: https://yum.tableplus.com/rpm/arm64/tableplus.repo
         dest: /etc/yum.repos.d/tableplus.repo
         mode: "0644"
-      when: ansible_architecture == "aarch64"
+      when: ansible_facts['architecture'] == "aarch64"
 
     - name: Install TablePlus (Fedora)
       ansible.builtin.dnf:
@@ -32,7 +32,7 @@
 # Ubuntu/Pop!_OS - native apt repository
 # ============================================================
 - name: Setup TablePlus (Ubuntu/Pop!_OS)
-  when: ansible_distribution in distros_debian
+  when: ansible_facts['distribution'] in distros_debian
   become: true
   block:
     - name: Add TablePlus GPG key
@@ -49,8 +49,8 @@
     - name: Determine Ubuntu version for TablePlus repo
       ansible.builtin.set_fact:
         tableplus_ubuntu_version: >-
-          {{ '24' if ansible_distribution_major_version | int >= 24
-             else '22' if ansible_distribution_major_version | int >= 22
+          {{ '24' if ansible_facts['distribution_major_version'] | int >= 24
+             else '22' if ansible_facts['distribution_major_version'] | int >= 22
              else '20' }}
 
     - name: Add TablePlus repository (Ubuntu x86_64)
@@ -60,7 +60,7 @@
           https://deb.tableplus.com/debian/{{ tableplus_ubuntu_version }} tableplus main
         state: present
         filename: tableplus
-      when: ansible_architecture == "x86_64"
+      when: ansible_facts['architecture'] == "x86_64"
 
     - name: Add TablePlus repository (Ubuntu ARM64)
       ansible.builtin.apt_repository:
@@ -69,7 +69,7 @@
           https://deb.tableplus.com/debian/{{ tableplus_ubuntu_version }}-arm tableplus main
         state: present
         filename: tableplus
-      when: ansible_architecture == "aarch64"
+      when: ansible_facts['architecture'] == "aarch64"
 
     - name: Install TablePlus (Ubuntu)
       ansible.builtin.apt:
@@ -81,7 +81,7 @@
 # Arch - AppImage fallback (AUR package is unreliable)
 # ============================================================
 - name: Setup TablePlus AppImage (Arch)
-  when: ansible_distribution in distros_arch
+  when: ansible_facts['distribution'] in distros_arch
   block:
     - name: Create Applications directory
       ansible.builtin.file:
@@ -94,14 +94,14 @@
         url: https://tableplus.com/release/linux/x64/TablePlus-x64.AppImage
         dest: "{{ user_home }}/Applications/TablePlus.AppImage"
         mode: "0755"
-      when: ansible_architecture == "x86_64"
+      when: ansible_facts['architecture'] == "x86_64"
 
     - name: Download TablePlus AppImage (ARM64)
       ansible.builtin.get_url:
         url: https://tableplus.com/release/linux/arm64/TablePlus-aarch64.AppImage
         dest: "{{ user_home }}/Applications/TablePlus.AppImage"
         mode: "0755"
-      when: ansible_architecture == "aarch64"
+      when: ansible_facts['architecture'] == "aarch64"
 
     - name: Create TablePlus desktop entry (Arch)
       ansible.builtin.copy:
@@ -122,7 +122,7 @@
   ansible.builtin.debug:
     msg: |
       TablePlus installed!
-      {% if ansible_distribution in distros_arch %}
+      {% if ansible_facts['distribution'] in distros_arch %}
       Note: Using AppImage on Arch (AUR package is unreliable).
       AppImage saved to ~/Applications/TablePlus.AppImage
       {% else %}

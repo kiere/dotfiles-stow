@@ -15,7 +15,7 @@
   become: true
   failed_when: false
   changed_when: false
-  when: ansible_distribution in distros_fedora
+  when: ansible_facts['distribution'] in distros_fedora
 
 - name: Add full Flathub repository (system-wide)
   community.general.flatpak_remote:
@@ -37,7 +37,7 @@
 
 - name: Report unavailable Flatpak apps
   ansible.builtin.debug:
-    msg: "Note: {{ item.item }} not available (possibly not built for {{ ansible_architecture }})"
+    msg: "Note: {{ item.item }} not available (possibly not built for {{ ansible_facts['architecture'] }})"
   loop: "{{ flatpak_result.results }}"
   when: item.failed | default(false)
   loop_control:

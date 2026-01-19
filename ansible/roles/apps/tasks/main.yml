@@ -16,8 +16,8 @@
 # Fedora - add 1Password repo (x86_64 only)
 - name: Setup 1Password (Fedora)
   when:
-    - ansible_distribution in distros_fedora
-    - ansible_architecture == "x86_64"
+    - ansible_facts['distribution'] in distros_fedora
+    - ansible_facts['architecture'] == "x86_64"
   become: true
   block:
     - name: Import 1Password GPG key
@@ -45,8 +45,8 @@
 # Ubuntu/Pop!_OS - add 1Password apt repo (x86_64 only)
 - name: Setup 1Password (Ubuntu/Pop!_OS)
   when:
-    - ansible_distribution in distros_debian
-    - ansible_architecture == "x86_64"
+    - ansible_facts['distribution'] in distros_debian
+    - ansible_facts['architecture'] == "x86_64"
   become: true
   block:
     - name: Add 1Password GPG key
@@ -77,8 +77,8 @@
 # Arch - 1Password from AUR with GPG verification (x86_64 only)
 - name: Setup 1Password (Arch)
   when:
-    - ansible_distribution in distros_arch
-    - ansible_architecture == "x86_64"
+    - ansible_facts['distribution'] in distros_arch
+    - ansible_facts['architecture'] == "x86_64"
   block:
     - name: Import 1Password GPG key for AUR verification
       ansible.builtin.command:
@@ -98,7 +98,7 @@
 # ============================================================
 
 - name: Setup VSCode (Fedora)
-  when: ansible_distribution in distros_fedora
+  when: ansible_facts['distribution'] in distros_fedora
   become: true
   block:
     - name: Import Microsoft GPG key
@@ -121,7 +121,7 @@
         state: present
 
 - name: Setup VSCode (Ubuntu/Pop!_OS)
-  when: ansible_distribution in distros_debian
+  when: ansible_facts['distribution'] in distros_debian
   become: true
   block:
     - name: Add Microsoft GPG key
@@ -151,14 +151,14 @@
   kewlfft.aur.aur:
     name: visual-studio-code-bin
     state: present
-  when: ansible_distribution in distros_arch
+  when: ansible_facts['distribution'] in distros_arch
 
 # ============================================================
 # Brave Browser
 # ============================================================
 
 - name: Setup Brave Browser (Fedora)
-  when: ansible_distribution in distros_fedora
+  when: ansible_facts['distribution'] in distros_fedora
   become: true
   block:
     - name: Import Brave GPG key
@@ -178,7 +178,7 @@
         state: present
 
 - name: Setup Brave Browser (Ubuntu/Pop!_OS)
-  when: ansible_distribution in distros_debian
+  when: ansible_facts['distribution'] in distros_debian
   become: true
   block:
     - name: Add Brave GPG key
@@ -205,7 +205,7 @@
     name: "{{ pkg_brave }}"
     state: present
   become: true
-  when: ansible_distribution in distros_arch
+  when: ansible_facts['distribution'] in distros_arch
 
 # ============================================================
 # Dropbox (native for Nautilus/tray integration)
@@ -220,8 +220,8 @@
     disable_gpg_check: true
   become: true
   when:
-    - ansible_distribution in distros_fedora
-    - ansible_architecture == "x86_64"
+    - ansible_facts['distribution'] in distros_fedora
+    - ansible_facts['architecture'] == "x86_64"
   failed_when: false  # Don't fail if download unavailable
 
 # Ubuntu/Debian - download from Dropbox directly
@@ -232,14 +232,14 @@
       - libpango-1.0-0
     state: present
   become: true
-  when: ansible_distribution in distros_debian
+  when: ansible_facts['distribution'] in distros_debian
 
 - name: Download and install Dropbox (Ubuntu/Pop!_OS)
   ansible.builtin.apt:
     deb: https://linux.dropbox.com/packages/ubuntu/dropbox_2024.04.17_amd64.deb
     state: present
   become: true
-  when: ansible_distribution in distros_debian
+  when: ansible_facts['distribution'] in distros_debian
   # Note: Check https://www.dropbox.com/install-linux for latest version if this fails
 
 # Arch - dropbox from AUR
@@ -247,18 +247,18 @@
   kewlfft.aur.aur:
     name: dropbox
     state: present
-  when: ansible_distribution in distros_arch
+  when: ansible_facts['distribution'] in distros_arch
 
 - name: Note about skipped x86_64-only apps
   ansible.builtin.debug:
-    msg: "Note: 1Password skipped (x86_64 only, not available for {{ ansible_architecture }})"
-  when: ansible_architecture != "x86_64"
+    msg: "Note: 1Password skipped (x86_64 only, not available for {{ ansible_facts['architecture'] }})"
+  when: ansible_facts['architecture'] != "x86_64"
 
 - name: Display apps installation complete
   ansible.builtin.debug:
     msg: |
       Native apps installed:
-      - 1Password + CLI {{ '(skipped - x86_64 only)' if ansible_architecture != 'x86_64' else '' }}
+      - 1Password + CLI {{ '(skipped - x86_64 only)' if ansible_facts['architecture'] != 'x86_64' else '' }}
       - VSCode
       - Brave Browser
       - Dropbox

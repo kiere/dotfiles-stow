@@ -18,20 +18,20 @@
   pre_tasks:
     - name: Display detected distribution
       ansible.builtin.debug:
-        msg: "Detected: {{ ansible_distribution }} {{ ansible_distribution_version }} ({{ ansible_os_family }})"
+        msg: "Detected: {{ ansible_facts['distribution'] }} {{ ansible_facts['distribution_version'] }} ({{ ansible_facts['os_family'] }})"
       tags: always
 
     - name: Load distribution-specific variables
       ansible.builtin.include_vars:
-        file: "group_vars/{{ ansible_distribution }}.yml"
+        file: "group_vars/{{ ansible_facts['distribution'] }}.yml"
       tags: always
 
     - name: Verify supported distribution
       ansible.builtin.assert:
         that:
-          - ansible_distribution in distros_supported
-        fail_msg: "Unsupported distribution: {{ ansible_distribution }}. Supported: {{ distros_supported | join(', ') }}"
-        success_msg: "Distribution {{ ansible_distribution }} is supported"
+          - ansible_facts['distribution'] in distros_supported
+        fail_msg: "Unsupported distribution: {{ ansible_facts['distribution'] }}. Supported: {{ distros_supported | join(', ') }}"
+        success_msg: "Distribution {{ ansible_facts['distribution'] }} is supported"
       tags: always
 
   roles:

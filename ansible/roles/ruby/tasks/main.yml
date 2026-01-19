@@ -8,7 +8,7 @@
   register: ruby_install
   changed_when: "'installed' in ruby_install.stdout or 'ruby@' in ruby_install.stdout"
   environment:
-    PATH: "{{ ansible_env.PATH }}:/usr/local/bin:{{ user_home }}/.local/bin"
+    PATH: "{{ ansible_facts['env']['PATH'] }}:/usr/local/bin:{{ user_home }}/.local/bin"
 
 - name: Install additional Ruby version ({{ mise_ruby_additional }})
   ansible.builtin.command:
@@ -17,7 +17,7 @@
   changed_when: "'installed' in ruby_additional_install.stdout"
   when: mise_ruby_additional is defined
   environment:
-    PATH: "{{ ansible_env.PATH }}:/usr/local/bin:{{ user_home }}/.local/bin"
+    PATH: "{{ ansible_facts['env']['PATH'] }}:/usr/local/bin:{{ user_home }}/.local/bin"
 
 - name: Install bundler gem
   ansible.builtin.command:
@@ -25,7 +25,7 @@
   register: ruby_bundler_install
   changed_when: "'Successfully installed' in ruby_bundler_install.stdout"
   environment:
-    PATH: "{{ ansible_env.PATH }}:/usr/local/bin:{{ user_home }}/.local/bin"
+    PATH: "{{ ansible_facts['env']['PATH'] }}:/usr/local/bin:{{ user_home }}/.local/bin"
 
 - name: Install Rails gem
   ansible.builtin.command:
@@ -33,7 +33,7 @@
   register: ruby_rails_install
   changed_when: "'Successfully installed' in ruby_rails_install.stdout"
   environment:
-    PATH: "{{ ansible_env.PATH }}:/usr/local/bin:{{ user_home }}/.local/bin"
+    PATH: "{{ ansible_facts['env']['PATH'] }}:/usr/local/bin:{{ user_home }}/.local/bin"
 
 - name: Display Ruby installation complete
   ansible.builtin.debug:

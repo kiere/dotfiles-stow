@@ -8,7 +8,7 @@
   register: python_install
   changed_when: "'installed' in python_install.stdout or 'python@' in python_install.stdout"
   environment:
-    PATH: "{{ ansible_env.PATH }}:/usr/local/bin:{{ user_home }}/.local/bin"
+    PATH: "{{ ansible_facts['env']['PATH'] }}:/usr/local/bin:{{ user_home }}/.local/bin"
 
 - name: Upgrade pip
   ansible.builtin.command:
@@ -16,7 +16,7 @@
   register: python_pip_upgrade
   changed_when: "'Successfully installed' in python_pip_upgrade.stdout"
   environment:
-    PATH: "{{ ansible_env.PATH }}:/usr/local/bin:{{ user_home }}/.local/bin"
+    PATH: "{{ ansible_facts['env']['PATH'] }}:/usr/local/bin:{{ user_home }}/.local/bin"
 
 - name: Display Python installation complete
   ansible.builtin.debug:

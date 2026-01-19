@@ -4,7 +4,7 @@
 
 # Fedora - add Tailscale repo
 - name: Setup Tailscale (Fedora)
-  when: ansible_distribution in distros_fedora
+  when: ansible_facts['distribution'] in distros_fedora
   become: true
   block:
     - name: Add Tailscale repository
@@ -20,7 +20,7 @@
 
 # Ubuntu/Pop!_OS - add Tailscale apt repo
 - name: Setup Tailscale (Ubuntu/Pop!_OS)
-  when: ansible_distribution in distros_debian
+  when: ansible_facts['distribution'] in distros_debian
   become: true
   block:
     - name: Add Tailscale GPG key
@@ -33,7 +33,7 @@
       ansible.builtin.apt_repository:
         repo: >-
           deb [signed-by=/usr/share/keyrings/tailscale-archive-keyring.gpg]
-          https://pkgs.tailscale.com/stable/ubuntu {{ ansible_distribution_release }} main
+          https://pkgs.tailscale.com/stable/ubuntu {{ ansible_facts['distribution_release'] }} main
         state: present
         filename: tailscale
 
@@ -49,7 +49,7 @@
     name: "{{ pkg_tailscale }}"
     state: present
   become: true
-  when: ansible_distribution in distros_arch
+  when: ansible_facts['distribution'] in distros_arch
 
 - name: Enable and start Tailscale service
   ansible.builtin.systemd:

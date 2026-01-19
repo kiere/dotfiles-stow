@@ -15,7 +15,7 @@
 # Fedora - grub-btrfs for bootable snapshots
 # ============================================================
 - name: Setup grub-btrfs (Fedora)
-  when: ansible_distribution in distros_fedora
+  when: ansible_facts['distribution'] in distros_fedora
   become: true
   block:
     - name: Enable grub-btrfs COPR
@@ -38,7 +38,7 @@
 # Arch - snap-pac for automatic pacman hooks + bootable snapshots
 # ============================================================
 - name: Setup snapper integration (Arch)
-  when: ansible_distribution in distros_arch
+  when: ansible_facts['distribution'] in distros_arch
   block:
     - name: Install snap-pac for pacman hooks
       kewlfft.aur.aur:
@@ -163,10 +163,10 @@
       - Root and home snapshot configs created
       - Timeline snapshots disabled (package manager triggers only)
       - Conservative limits: 5 snapshots, 30% space limit
-      {% if ansible_distribution in distros_fedora %}
+      {% if ansible_facts['distribution'] in distros_fedora %}
       - grub-btrfs installed: snapshots appear in GRUB boot menu
       - Automatic snapshots on dnf transactions via dnf-plugin-snapper
-      {% elif ansible_distribution in distros_arch %}
+      {% elif ansible_facts['distribution'] in distros_arch %}
       - snap-pac installed: automatic snapshots on pacman transactions
       - Bootable snapshots via {{ 'limine-snapper-sync' if limine_check.rc == 0 else 'grub-btrfs' }}
       {% else %}

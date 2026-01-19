@@ -15,7 +15,7 @@
     state: enabled
   become: true
   when:
-    - ansible_distribution in distros_fedora
+    - ansible_facts['distribution'] in distros_fedora
     - lazygit_copr_repo is defined
 
 - name: Install lazygit from COPR (Fedora)
@@ -23,10 +23,10 @@
     name: lazygit
     state: present
   become: true
-  when: ansible_distribution in distros_fedora
+  when: ansible_facts['distribution'] in distros_fedora
 
 - name: Install lazygit binary (Ubuntu/Pop!_OS)
-  when: ansible_distribution in distros_debian
+  when: ansible_facts['distribution'] in distros_debian
   block:
     - name: Get latest lazygit release info
       ansible.builtin.uri:
@@ -58,11 +58,11 @@
     state: present
   when: homebrew_check.stat.exists
   environment:
-    PATH: "/home/linuxbrew/.linuxbrew/bin:{{ ansible_env.PATH }}"
+    PATH: "/home/linuxbrew/.linuxbrew/bin:{{ ansible_facts['env']['PATH'] }}"
 
 # GitHub CLI - needs repo setup on Ubuntu
 - name: Setup GitHub CLI repo (Ubuntu/Pop!_OS)
-  when: ansible_distribution in distros_debian
+  when: ansible_facts['distribution'] in distros_debian
   become: true
   block:
     - name: Add GitHub CLI GPG key

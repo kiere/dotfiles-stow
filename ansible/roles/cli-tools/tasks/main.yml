@@ -13,9 +13,9 @@
   ansible.builtin.command:
     cmd: cargo install eza
     creates: "{{ user_home }}/.cargo/bin/eza"
-  when: ansible_distribution not in distros_arch
+  when: ansible_facts['distribution'] not in distros_arch
   environment:
-    PATH: "{{ ansible_env.PATH }}:{{ user_home }}/.cargo/bin"
+    PATH: "{{ ansible_facts['env']['PATH'] }}:{{ user_home }}/.cargo/bin"
 
 # starship - install via curl on Fedora/Ubuntu
 - name: Install starship prompt (Fedora/Debian)
@@ -26,7 +26,7 @@
     executable: /bin/bash
     creates: /usr/local/bin/starship
   become: true
-  when: ansible_distribution not in distros_arch
+  when: ansible_facts['distribution'] not in distros_arch
 
 # Arch has starship in official repos (already in pkg_cli_tools)
 

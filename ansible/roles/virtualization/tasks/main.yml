@@ -10,7 +10,7 @@
     name: "@virtualization"
     state: present
   become: true
-  when: ansible_distribution in distros_fedora
+  when: ansible_facts['distribution'] in distros_fedora
 
 - name: Install virtualization GUI tools (Fedora)
   ansible.builtin.dnf:
@@ -19,7 +19,7 @@
       - gnome-boxes
     state: present
   become: true
-  when: ansible_distribution in distros_fedora
+  when: ansible_facts['distribution'] in distros_fedora
 
 # ============================================================
 # Arch - install packages individually
@@ -29,7 +29,7 @@
     name: "{{ pkg_virtualization }}"
     state: present
   become: true
-  when: ansible_distribution in distros_arch
+  when: ansible_facts['distribution'] in distros_arch
 
 # ============================================================
 # Ubuntu - install packages individually
@@ -39,14 +39,14 @@
     name: "{{ pkg_virtualization }}"
     state: present
   become: true
-  when: ansible_distribution in distros_debian
+  when: ansible_facts['distribution'] in distros_debian
 
 # ============================================================
 # Common setup (all distros)
 # ============================================================
 - name: Add user to libvirt group
   ansible.builtin.user:
-    name: "{{ ansible_user_id }}"
+    name: "{{ ansible_facts['user_id'] }}"
     groups: libvirt
     append: true
   become: true

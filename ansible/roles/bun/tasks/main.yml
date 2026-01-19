@@ -8,7 +8,7 @@
   register: bun_install
   changed_when: "'installed' in bun_install.stdout or 'bun@' in bun_install.stdout"
   environment:
-    PATH: "{{ ansible_env.PATH }}:/usr/local/bin:{{ user_home }}/.local/bin"
+    PATH: "{{ ansible_facts['env']['PATH'] }}:/usr/local/bin:{{ user_home }}/.local/bin"
 
 - name: Display Bun installation complete
   ansible.builtin.debug:

@@ -22,8 +22,8 @@ distros_supported:
   - CachyOS
 
 # User configuration
-user_name: "{{ ansible_user_id }}"
-user_home: "{{ ansible_env.HOME }}"
+user_name: "{{ ansible_facts['user_id'] }}"
+user_home: "{{ ansible_facts['env']['HOME'] }}"
 
 # Dotfiles location
 dotfiles_dir: "{{ user_home }}/dotfiles"
