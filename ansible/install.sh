@@ -98,10 +98,10 @@ fi
 # Activate mise for this shell session
 eval "$(mise activate bash)"
 
-# Install tools via mise (Python is defined in ~/.config/mise/config.toml)
-info "Setting up tools via mise..."
+# Install only Python via mise (other tools need build deps installed by playbook)
+info "Setting up Python via mise..."
 mise trust 2>/dev/null || true
-mise install
+mise install python
 
 # Activate mise again to pick up Python
 eval "$(mise activate bash)"
