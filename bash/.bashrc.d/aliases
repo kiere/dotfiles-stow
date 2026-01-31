@@ -8,6 +8,13 @@ alias ll='eza -la'
 alias tree='eza --tree'
 alias du='dust'
 
+# Command Shortcuts
+alias y='yazi'
+alias n='nvim'
+alias pm='podman'
+alias pmc='podman-compose'
+alias macsync='rsync -avhP --exclude ".DS_Store" --exclude "._*"'
+
 # Git aliases
 alias lg='lazygit'
 alias gst='git status'
@@ -18,5 +25,5 @@ alias gdi='git diff --cached'
 
 # Project aliases
 alias dotfiles='cd ~/dotfiles'
-alias outdoor='cd ~/work/code/outdoor'
+alias outdoor='cd ~/work/code/outdoor_app/outdoor'
 alias ginger='cd ~/work/code/ginger'
