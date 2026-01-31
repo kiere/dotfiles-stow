@@ -5,3 +5,5 @@
 	defaultBranch = main
 [alias]
 	co = checkout
+[pull]
+	rebase = true
