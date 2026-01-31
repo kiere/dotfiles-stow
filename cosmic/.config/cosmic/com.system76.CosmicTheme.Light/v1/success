@@ -2,7 +2,7 @@
     base: (
         red: 0.09411765,
         green: 0.33333334,
-        blue: 0.16078432,
+        blue: 0.1607843,
         alpha: 1.0,
     ),
     hover: (
@@ -50,7 +50,7 @@
     disabled: (
         red: 0.09411765,
         green: 0.33333334,
-        blue: 0.16078432,
+        blue: 0.1607843,
         alpha: 1.0,
     ),
     on_disabled: (
@@ -62,13 +62,13 @@
     border: (
         red: 0.09411765,
         green: 0.33333334,
-        blue: 0.16078432,
+        blue: 0.1607843,
         alpha: 1.0,
     ),
     disabled_border: (
         red: 0.09411765,
         green: 0.33333334,
-        blue: 0.16078432,
+        blue: 0.1607843,
         alpha: 0.5,
     ),
 )

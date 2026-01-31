@@ -6,5 +6,12 @@
         ],
         key: "b",
         description: Some("Open Browser"),
-    ): Spawn("xdg-open about:blank"),
+    ): Spawn("brave-browser"),
+    (
+        modifiers: [
+            Super,
+        ],
+        key: "Return",
+        description: Some("Open Terminal"),
+    ): Spawn("ghostty"),
 }
